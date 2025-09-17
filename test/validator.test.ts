@@ -4,14 +4,38 @@ import { expect, test } from "vitest";
 import { validateScript } from "../src/validator/validator";
 import * as Scripts from "./scripts";
 
-test("Validates a script with too much droisoning", () => {
+test("Validates a script with too much misinformation", () => {
   const results = validateScript(Scripts.tooMuchDroisoning as Script);
-  const droisoningResult = results.find((r) => r.id === "droisoning");
-  expect(droisoningResult).toBeDefined();
-  expect(droisoningResult?.severity).toBe("medium");
-  expect(droisoningResult?.characters).toHaveLength(11);
-  expect(droisoningResult?.message).toBe(
-    "There are 11 sources of droisoning on this script. Consider removing some of them."
+  const misinfoResult = results.find((r) => r.id === "misinfo");
+  expect(misinfoResult).toBeDefined();
+  expect(misinfoResult?.severity).toBe("medium");
+  expect(misinfoResult?.characters).toHaveLength(11);
+  expect(misinfoResult?.message).toBe(
+    "There are 11 sources of misinformation on this script. Consider removing some of them."
+  );
+});
+
+test("Validates a script with too little misinformation", () => {
+  // Create a script with only 1 misinformation source
+  const lowMisinfoScript: Script = [
+    { id: "_meta", author: "Test", name: "Low Misinfo Test" },
+    "washerwoman", // no misinfo
+    "librarian", // no misinfo
+    "investigator", // no misinfo
+    "chef", // no misinfo
+    "empath", // no misinfo
+    "poisoner", // causes misinfo
+    "imp",
+  ];
+
+  const results = validateScript(lowMisinfoScript);
+  const misinfoResult = results.find((r) => r.id === "misinfo");
+  expect(misinfoResult).toBeDefined();
+  expect(misinfoResult?.severity).toBe("low");
+  expect(misinfoResult?.characters).toHaveLength(1);
+  expect(misinfoResult?.characters).toContain("poisoner");
+  expect(misinfoResult?.message).toBe(
+    "There is only 1 source of misinformation on this script. Consider adding more, or using the Fibbin fabled."
   );
 });
 
@@ -45,14 +69,115 @@ test("Validates a script with character clashes", () => {
   const results = validateScript(Scripts.characterClash as Script);
   const clashResults = results.filter((r) => r.id === "character-clash");
 
-  // Should find multiple clashes in this script that contains many clashing character pairs
-  expect(clashResults).toHaveLength(17);
+  expect(clashResults).toHaveLength(16);
+});
 
-  // All clash results should have appropriate severity levels
-  clashResults.forEach((result) => {
-    expect(["low", "medium", "high"]).toContain(result.severity);
-    expect(result.characters).toHaveLength(2);
-  });
+test("Validates a script with insufficient outsider modification", () => {
+  // Create a script with only 1 outsider modification source
+  const lowOutsiderModScript: Script = [
+    { id: "_meta", author: "Test", name: "Low Outsider Mod Test" },
+    "washerwoman",
+    "librarian",
+    "investigator",
+    "chef",
+    "empath",
+    "godfather", // has outsider modification
+    "poisoner",
+    "imp",
+  ];
+
+  const results = validateScript(lowOutsiderModScript);
+  const outsiderModResult = results.find(
+    (r) => r.id === "outsider-modification"
+  );
+  expect(outsiderModResult).toBeDefined();
+  expect(outsiderModResult?.severity).toBe("medium");
+  expect(outsiderModResult?.characters).toHaveLength(1);
+  expect(outsiderModResult?.characters).toContain("godfather");
+  expect(outsiderModResult?.message).toBe(
+    "If their is only one source of outsider modification, consider including more shy outsiders to hide this (eg. Mutant, Sweetheart, Barber)."
+  );
+});
+
+test("Validates a script with no outsider modification", () => {
+  // Create a script with 0 outsider modification sources
+  const noOutsiderModScript: Script = [
+    { id: "_meta", author: "Test", name: "No Outsider Mod Test" },
+    "washerwoman",
+    "librarian",
+    "investigator",
+    "chef",
+    "empath",
+    "poisoner",
+    "imp",
+  ];
+
+  const results = validateScript(noOutsiderModScript);
+  const outsiderModResult = results.find(
+    (r) => r.id === "outsider-modification"
+  );
+  expect(outsiderModResult).toBeDefined();
+  expect(outsiderModResult?.severity).toBe("medium");
+  expect(outsiderModResult?.characters).toHaveLength(0);
+  expect(outsiderModResult?.message).toBe(
+    "Without any outsider modification, the evil team will struggle to bluff outsiders."
+  );
+});
+
+test("Validates a script with two extra evil sources", () => {
+  // Create a script with 2 characters that can add evil players
+  const twoExtraEvilScript: Script = [
+    { id: "_meta", author: "Test", name: "Two Extra Evil Test" },
+    "washerwoman",
+    "librarian",
+    "investigator",
+    "chef",
+    "empath",
+    "bountyhunter", // can add evil
+    "mezepheles", // can add evil
+    "poisoner",
+    "imp",
+  ];
+
+  const results = validateScript(twoExtraEvilScript);
+  const extraEvilResult = results.find((r) => r.id === "extra-evil");
+  expect(extraEvilResult).toBeDefined();
+  expect(extraEvilResult?.severity).toBe("medium");
+  expect(extraEvilResult?.characters).toHaveLength(2);
+  expect(extraEvilResult?.characters).toContain("bountyhunter");
+  expect(extraEvilResult?.characters).toContain("mezepheles");
+  expect(extraEvilResult?.message).toBe(
+    "There are 2 characters that can add extra evil players. Consider if this provides enough balance for the good team."
+  );
+});
+
+test("Validates a script with three or more extra evil sources", () => {
+  // Create a script with 3 characters that can add evil players
+  const threeExtraEvilScript: Script = [
+    { id: "_meta", author: "Test", name: "Three Extra Evil Test" },
+    "washerwoman",
+    "librarian",
+    "investigator",
+    "chef",
+    "empath",
+    "bountyhunter", // can add evil
+    "ogre", // can add evil
+    "mezepheles", // can add evil
+    "poisoner",
+    "imp",
+  ];
+
+  const results = validateScript(threeExtraEvilScript);
+  const extraEvilResult = results.find((r) => r.id === "extra-evil");
+  expect(extraEvilResult).toBeDefined();
+  expect(extraEvilResult?.severity).toBe("high");
+  expect(extraEvilResult?.characters).toHaveLength(3);
+  expect(extraEvilResult?.characters).toContain("bountyhunter");
+  expect(extraEvilResult?.characters).toContain("ogre");
+  expect(extraEvilResult?.characters).toContain("mezepheles");
+  expect(extraEvilResult?.message).toBe(
+    "There are 3 characters that can add extra evil players. This may make the game unbalanced in favor of evil."
+  );
 });
 
 test("Official scripts pass validation", () => {

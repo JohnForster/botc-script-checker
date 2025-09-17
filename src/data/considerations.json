@@ -255,13 +255,6 @@
     "jinxes": [],
     "requirements": {},
     "suggestions": {},
-    "clashes": [
-      {
-        "characters": ["clockmaker"],
-        "reason": "Chef & Clockmaker can sometimes produce game-solving info.",
-        "severity": "medium"
-      }
-    ],
     "tags": ["YSK"],
     "setup": {}
   },
@@ -285,6 +278,13 @@
     "jinxes": ["summoner"],
     "requirements": {},
     "suggestions": {},
+    "clashes": [
+      {
+        "characters": ["investigator"],
+        "reason": "Without care, Investigator & Clockmaker together can sometimes produce game-solving info.",
+        "severity": "low"
+      }
+    ],
     "tags": ["YSK"],
     "setup": {}
   },
@@ -296,7 +296,7 @@
       {
         "characters": ["leviathan"],
         "reason": "Without sufficient droisoning, a Courtier can extend a Leviathan game by 3 days.",
-        "severity": "high"
+        "severity": "medium"
       }
     ],
     "tags": ["causes-droisoning"],
@@ -429,7 +429,16 @@
     "requirements": {},
     "suggestions": {},
     "tags": ["change-character", "extra-evil"],
-    "setup": {}
+    "clashes": [
+      {
+        "characters": ["drunk"],
+        "reason": "The Drunk makes every player a demon candidate in a Fang Gu game.",
+        "severity": "medium"
+      }
+    ],
+    "setup": {
+      "outsiders": [1]
+    }
   },
   "farmer": {
     "jinxes": ["leviathan", "riot"],
@@ -561,7 +570,7 @@
     "jinxes": ["boffin", "kazali", "pit-hag"],
     "requirements": {},
     "suggestions": {},
-    "tags": ["change-alignment", "causes-droisoning"],
+    "tags": ["change-alignment", "causes-droisoning", "shy-outsider"],
     "setup": {}
   },
   "gossip": {
@@ -787,6 +796,51 @@
         "characters": ["bountyhunter"],
         "reason": "Adding an extra evil player to a Legion game can make it significantly harder for the good team to win.",
         "severity": "medium"
+      },
+      {
+        "characters": ["fearmonger"],
+        "reason": "The existence of a Fearmonger proves Legion is not in play",
+        "severity": "medium"
+      },
+      {
+        "characters": ["vizier"],
+        "reason": "The existence of a Vizier proves Legion is not in play",
+        "severity": "medium"
+      },
+      {
+        "characters": ["organgrinder"],
+        "reason": "The Organ Grinder must avoid using their ability to preserve Legion worlds",
+        "severity": "low"
+      },
+      {
+        "characters": ["psychopath"],
+        "reason": "The Psychopath must avoid using their ability to preserve Legion worlds",
+        "severity": "low"
+      },
+      {
+        "characters": ["artist"],
+        "reason": "The artist can hard-confirm Legion.",
+        "severity": "medium"
+      },
+      {
+        "characters": ["chambermaid"],
+        "reason": "The Chambermaid is very powerful in a Legion game.",
+        "severity": "low"
+      },
+      {
+        "characters": ["chef"],
+        "reason": "The Chef is very powerful in a Legion game.",
+        "severity": "low"
+      },
+      {
+        "characters": ["empath"],
+        "reason": "The Empath is very powerful in a Legion game.",
+        "severity": "low"
+      },
+      {
+        "characters": ["fortuneteller"],
+        "reason": "The Fortune Teller is very powerful in a Legion game.",
+        "severity": "low"
       }
     ],
     "requirements": {},
@@ -849,6 +903,18 @@
     "requirements": {},
     "suggestions": {},
     "tags": ["causes-droisoning", "prevents-execution"],
+    "clashes": [
+      {
+        "characters": ["sailor"],
+        "reason": "The game can end prematurely if the Lleech-host Sailor volunteers for execution.",
+        "severity": "low"
+      },
+      {
+        "characters": ["tealady"],
+        "reason": "The game can end prematurely if a Lleech-host neighbour of the Tea Lady volunteers for execution.",
+        "severity": "low"
+      }
+    ],
     "setup": {}
   },
   "lordoftyphon": {
@@ -864,7 +930,7 @@
     "jinxes": ["mathematician"],
     "requirements": {},
     "suggestions": {},
-    "tags": ["unknown-to-player"],
+    "tags": ["unknown-to-player", "shy-outsider"],
     "setup": {}
   },
   "lycanthrope": {
@@ -975,6 +1041,13 @@
     "requirements": {},
     "suggestions": {},
     "tags": ["YSK"],
+    "clashes": [
+      {
+        "characters": ["investigator"],
+        "reason": "The Noble and Investigator together can be incredibly strong.",
+        "severity": "low"
+      }
+    ],
     "setup": {}
   },
   "nodashii": {
@@ -1132,6 +1205,13 @@
     "requirements": {},
     "suggestions": {},
     "tags": ["day-death", "prevents-execution", "public"],
+    "clashes": [
+      {
+        "characters": ["vigormortis"],
+        "reason": "A Vigormortis-killed Psychopath is incredibly powerful.",
+        "severity": "medium"
+      }
+    ],
     "setup": {}
   },
   "pukka": {
