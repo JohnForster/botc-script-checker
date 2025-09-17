@@ -44,12 +44,16 @@ export interface CharacterConsiderations {
   };
 
   /**
-   * Character interactions that aren't full jinxes but create edge cases
+   * Character interactions that produce bad interactions, but do not have an effective jinx
    */
-  clashes?: {
-    [characterId: string]: string;
-  };
+  clashes?: Clash[];
 }
+
+export type Clash = {
+  characters: string[];
+  reason: string;
+  severity: "low" | "medium" | "high";
+};
 
 /**
  * Complete considerations data mapping character IDs to their considerations

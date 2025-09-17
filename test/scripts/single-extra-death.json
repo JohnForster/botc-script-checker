@@ -1,0 +1,30 @@
+[
+  {
+    "id": "_meta",
+    "author": "Test",
+    "name": "Single Extra Death Test Script"
+  },
+  "chef",
+  "empath",
+  "fortuneteller",
+  "investigator",
+  "librarian",
+  "mayor",
+  "monk",
+  "ravenkeeper",
+  "slayer",
+  "soldier",
+  "undertaker",
+  "virgin",
+  "washerwoman",
+  "butler",
+  "drunk",
+  "recluse",
+  "saint",
+  "tinker",
+  "baron",
+  "poisoner",
+  "scarletwoman",
+  "spy",
+  "imp"
+]

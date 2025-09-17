@@ -46,6 +46,13 @@
       "droisoning": "< 7"
     },
     "requirements": {},
+    "clashes": [
+      {
+        "characters": ["vortox"],
+        "reason": "A Vortox makes it very difficult for the Amnesiac to guess their ability",
+        "severity": "high"
+      }
+    ],
     "tags": [],
     "setup": {}
   },
@@ -88,6 +95,13 @@
     "jinxes": ["marionette"],
     "requirements": {},
     "suggestions": {},
+    "clashes": [
+      {
+        "characters": ["poisoner"],
+        "reason": "A balloonist can be rendered effectively useless by a single random poisoning.",
+        "severity": "low"
+      }
+    ],
     "tags": ["each-night", "ongoing-info"],
     "setup": {
       "outsiders": [0, 1]
@@ -118,7 +132,13 @@
     "jinxes": ["heretic", "plaguedoctor"],
     "requirements": { "outsiders": "> 3" },
     "suggestions": {},
-    "clashes": { "kazali": "A Kazali-created Baron has no ability." },
+    "clashes": [
+      {
+        "characters": ["kazali"],
+        "reason": "A Kazali-created Baron has no ability.",
+        "severity": "medium"
+      }
+    ],
     "tags": ["quiet-minion"],
     "setup": {
       "outsiders": [2]
@@ -235,9 +255,13 @@
     "jinxes": [],
     "requirements": {},
     "suggestions": {},
-    "clashes": {
-      "clockmaker": "Chef & Clockmaker can sometimes produce game-solving info."
-    },
+    "clashes": [
+      {
+        "characters": ["clockmaker"],
+        "reason": "Chef & Clockmaker can sometimes produce game-solving info.",
+        "severity": "medium"
+      }
+    ],
     "tags": ["YSK"],
     "setup": {}
   },
@@ -246,6 +270,13 @@
     "requirements": {
       "character": "king"
     },
+    "clashes": [
+      {
+        "characters": ["vortox"],
+        "reason": "The Vortox effectively renders the Choirboy useless.",
+        "severity": "high"
+      }
+    ],
     "suggestions": {},
     "tags": [],
     "setup": {}
@@ -261,9 +292,13 @@
     "jinxes": ["summoner", "vizier"],
     "requirements": {},
     "suggestions": {},
-    "clashes": {
-      "leviathan": "Without sufficient droisoning, a Courtier can extend a leviathan game by 3 days."
-    },
+    "clashes": [
+      {
+        "characters": ["leviathan"],
+        "reason": "Without sufficient droisoning, a Courtier can extend a Leviathan game by 3 days.",
+        "severity": "high"
+      }
+    ],
     "tags": ["causes-droisoning"],
     "setup": {}
   },
@@ -271,14 +306,30 @@
     "jinxes": ["boffin", "pit-hag"],
     "requirements": {},
     "suggestions": {},
-    "clashes": {
-      "chef": "Chef & Clockmaker can sometimes produce game-solving info."
-    },
+    "clashes": [
+      {
+        "characters": ["chef"],
+        "reason": "Chef & Clockmaker can sometimes produce game-solving info.",
+        "severity": "medium"
+      }
+    ],
     "tags": [],
     "setup": {}
   },
   "damsel": {
     "jinxes": ["marionette", "pit-hag", "spy", "widow"],
+    "clashes": [
+      {
+        "characters": ["spy"],
+        "reason": "A Spy causes the Damsel to be poisoned, making the Damsel effectively pointless.",
+        "severity": "high"
+      },
+      {
+        "characters": ["widow"],
+        "reason": "A Widow causes the Damsel to be poisoned, making the Damsel effectively pointless.",
+        "severity": "high"
+      }
+    ],
     "requirements": {},
     "suggestions": {},
     "tags": ["alt-evil-win-con"],
@@ -426,6 +477,13 @@
     "jinxes": [],
     "requirements": {},
     "suggestions": {},
+    "clashes": [
+      {
+        "characters": ["organgrinder"],
+        "reason": "The Organ Grinder can render the Flowergirl useless",
+        "severity": "high"
+      }
+    ],
     "tags": ["each-night", "ongoing-info"],
     "setup": {}
   },
@@ -496,7 +554,7 @@
     "jinxes": [],
     "requirements": {},
     "suggestions": {},
-    "tags": ["extra-death", "once-per-game", "self-confirming"],
+    "tags": ["day-death", "once-per-game", "self-confirming"],
     "setup": {}
   },
   "goon": {
@@ -517,7 +575,7 @@
     "jinxes": ["leviathan", "riot"],
     "requirements": {},
     "suggestions": {},
-    "tags": ["character-confirmation", "extra-death"],
+    "tags": ["character-confirmation", "extra-death", "day-death"],
     "setup": {}
   },
   "gunslinger": {
@@ -538,7 +596,7 @@
     "jinxes": [],
     "requirements": {},
     "suggestions": {},
-    "tags": ["madness", "extra-death"],
+    "tags": ["madness", "day-death"],
     "setup": {}
   },
   "hatter": {
@@ -567,6 +625,28 @@
     ],
     "requirements": {},
     "suggestions": {},
+    "clashes": [
+      {
+        "characters": ["atheist"],
+        "reason": "The Atheist allows the ST to break the rules, rendering the Heretic useless.",
+        "severity": "high"
+      },
+      {
+        "characters": ["spy"],
+        "reason": "A jinx prevents the Heretic and the Spy from being in play at the same time.",
+        "severity": "high"
+      },
+      {
+        "characters": ["widow"],
+        "reason": "A jinx prevents the Heretic and the Widow from being in play at the same time.",
+        "severity": "high"
+      },
+      {
+        "characters": ["godfather"],
+        "reason": "A jinx prevents the Heretic and the Godfather from being in play at the same time.",
+        "severity": "high"
+      }
+    ],
     "tags": ["change-wincon"],
     "setup": {}
   },
@@ -592,6 +672,7 @@
       "character": "damsel"
     },
     "suggestions": {},
+
     "tags": ["once-per-game", "change-character"],
     "setup": {}
   },
@@ -609,7 +690,6 @@
     "tags": [
       "each-night",
       "causes-droisoning",
-
       "prevents-demon-kills",
       "prevents-night-death"
     ],
@@ -648,6 +728,13 @@
     ],
     "requirements": {},
     "suggestions": {},
+    "clashes": [
+      {
+        "characters": ["soldier"],
+        "reason": "The Soldier can cause the Kazali to be down one minion.",
+        "severity": "medium"
+      }
+    ],
     "tags": [],
     "setup": {
       "outsiders": "arbitrary"
@@ -671,6 +758,18 @@
     "jinxes": [],
     "requirements": {},
     "suggestions": {},
+    "clashes": [
+      {
+        "characters": ["lilmonsta"],
+        "reason": "The Lil Monsta renders the Knight effectively useless",
+        "severity": "high"
+      },
+      {
+        "characters": ["summoner"],
+        "reason": "The Summoner can create Lil Monsta, rendering the Knight effectively useless",
+        "severity": "high"
+      }
+    ],
     "tags": ["YSK"],
     "setup": {}
   },
@@ -683,9 +782,13 @@
       "summoner",
       "zealot"
     ],
-    "clashes": {
-      "bountyhunter": "Adding an extra evil player to a Legion game can make it significantly harder for the good team to win."
-    },
+    "clashes": [
+      {
+        "characters": ["bountyhunter"],
+        "reason": "Adding an extra evil player to a Legion game can make it significantly harder for the good team to win.",
+        "severity": "medium"
+      }
+    ],
     "requirements": {},
     "suggestions": {},
     "tags": ["extra-evil"],
@@ -1007,6 +1110,13 @@
     "jinxes": ["al-hadikhia", "cannibal"],
     "requirements": {},
     "suggestions": {},
+    "clashes": [
+      {
+        "characters": ["leviathan"],
+        "reason": "A Leviathan renders the Princess's ability useless.",
+        "severity": "high"
+      }
+    ],
     "tags": ["prevents-demon-kills"],
     "setup": {}
   },
@@ -1021,7 +1131,7 @@
     "jinxes": [],
     "requirements": {},
     "suggestions": {},
-    "tags": ["extra-death", "prevents-execution", "public"],
+    "tags": ["day-death", "prevents-execution", "public"],
     "setup": {}
   },
   "pukka": {
@@ -1263,7 +1373,7 @@
     "jinxes": [],
     "requirements": {},
     "suggestions": {},
-    "tags": ["extra-death"],
+    "tags": ["extra-death", "day-death"],
     "setup": {}
   },
   "towncrier": {
@@ -1359,7 +1469,7 @@
     "jinxes": [],
     "requirements": {},
     "suggestions": {},
-    "tags": ["extra-death"],
+    "tags": ["day-death", "noisy-minion"],
     "setup": {}
   },
   "wizard": {

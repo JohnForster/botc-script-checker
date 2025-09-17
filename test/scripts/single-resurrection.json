@@ -1,0 +1,30 @@
+[
+  {
+    "id": "_meta",
+    "author": "Test",
+    "name": "Single Resurrection Test Script"
+  },
+  "chef",
+  "empath",
+  "fortuneteller",
+  "investigator",
+  "librarian",
+  "mayor",
+  "monk",
+  "ravenkeeper",
+  "slayer",
+  "soldier",
+  "undertaker",
+  "virgin",
+  "washerwoman",
+  "professor",
+  "butler",
+  "drunk",
+  "recluse",
+  "saint",
+  "baron",
+  "poisoner",
+  "scarletwoman",
+  "spy",
+  "imp"
+]
