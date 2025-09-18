@@ -4,9 +4,10 @@ import {
   validateScript,
   type ValidationResult,
 } from "./validator/validator";
-import type { Script, OldScript } from "./types/types";
+import type { Script } from "./types/types";
 import compiledCharacters from "./data/compiled_characters.json";
 import "./app.css";
+import { getName } from "./types/script";
 
 export function App() {
   const [scriptText, setScriptText] = useState("");
@@ -32,20 +33,6 @@ export function App() {
     }
   };
 
-  const convertOldToNewFormat = (oldScript: OldScript): Script => {
-    const [meta, ...characters] = oldScript;
-    return [meta, ...characters.map((char) => char.id)];
-  };
-
-  const isOldFormat = (script: any): script is OldScript => {
-    const [_, ...characters] = script;
-    return (
-      characters.length > 0 &&
-      typeof characters[0] === "object" &&
-      "id" in characters[0]
-    );
-  };
-
   const handleValidate = () => {
     setError(null);
     setValidationResults([]);
@@ -56,14 +43,7 @@ export function App() {
     }
 
     try {
-      const parsedScript = JSON.parse(scriptText);
-      let script: Script;
-
-      if (isOldFormat(parsedScript)) {
-        script = convertOldToNewFormat(parsedScript);
-      } else {
-        script = parsedScript as Script;
-      }
+      const script: Script = JSON.parse(scriptText);
 
       const results = validateScript(script);
       setScript(script);
@@ -159,7 +139,7 @@ export function App() {
 
       {validationResults && validationResults.length > 0 && (
         <div class="results-section">
-          <h2>{script && script[0].name} - Results</h2>
+          <h2>{script && getName(script)} - Results</h2>
           <div class="results-summary">
             Found {validationResults.length} issue
             {validationResults.length !== 1 ? "s" : ""}

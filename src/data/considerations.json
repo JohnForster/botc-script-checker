@@ -850,6 +850,11 @@
         "severity": "low"
       },
       {
+        "characters": ["slayer"],
+        "reason": "The Slayer is very powerful in a Legion game.",
+        "severity": "low"
+      },
+      {
         "characters": ["fortuneteller"],
         "reason": "The Fortune Teller is very powerful in a Legion game.",
         "severity": "low"

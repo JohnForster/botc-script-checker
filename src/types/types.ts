@@ -1,5 +1,3 @@
-type ScriptMeta = { id: string; author: string; name: string };
+import type { BloodOnTheClocktowerCustomScript } from "./schema";
 
-export type Script = [ScriptMeta, ...string[]];
-
-export type OldScript = [ScriptMeta, ...{ id: string }[]];
+export type Script = BloodOnTheClocktowerCustomScript;

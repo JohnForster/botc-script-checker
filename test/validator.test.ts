@@ -241,6 +241,7 @@ test("Validates a script with Legion and overpowered characters", () => {
 
   const results = validateScript(legionScript);
   const legionResult = results.find((r) => r.id === "legion");
+  console.log("legionResult.characters:", legionResult?.characters);
   expect(legionResult).toBeDefined();
   expect(legionResult?.severity).toBe("high");
   expect(legionResult?.characters).toContain("legion");

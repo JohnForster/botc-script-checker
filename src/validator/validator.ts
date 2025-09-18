@@ -4,6 +4,7 @@ import type { ConsiderationsData } from "../data/considerations.d.ts";
 const considerations = considerationsJSON as ConsiderationsData;
 import compiledCharactersJSON from "../data/compiled_characters.json";
 import type { CompiledCharactersData } from "../data/compiled_characters";
+import { getCharacters } from "../types/script.ts";
 const allCharacters = compiledCharactersJSON as CompiledCharactersData;
 
 export const FAILURES = {
@@ -61,7 +62,7 @@ export function validateScript(script: Script): ValidationResult[] {
 function misinformation(script: Script): ValidationResult | null {
   const MAX_MISINFORMATION = 6;
   const MIN_MISINFORMATION = 3;
-  const chars = script.slice(1) as string[];
+  const chars = getCharacters(script);
   const misinfoChars = chars.filter(
     (char) =>
       considerations[char]?.tags.includes("causes-droisoning") ||
@@ -93,7 +94,7 @@ function misinformation(script: Script): ValidationResult | null {
 }
 
 function singleResurrectionSource(script: Script): ValidationResult | null {
-  const chars = script.slice(1) as string[];
+  const chars = getCharacters(script);
   const resurrectionChars = chars.filter((char) =>
     considerations[char]?.tags.includes("resurrection")
   );
@@ -115,7 +116,7 @@ function singleResurrectionSource(script: Script): ValidationResult | null {
 }
 
 function singleExtraDeathSource(script: Script): ValidationResult | null {
-  const chars = script.slice(1) as string[];
+  const chars = getCharacters(script);
   const extraDeathChars = chars.filter((char) =>
     considerations[char]?.tags.includes("extra-death")
   );
@@ -138,7 +139,7 @@ function singleExtraDeathSource(script: Script): ValidationResult | null {
 
 function confirmationChain(script: Script): ValidationResult | null {
   const MAX_CONFIRMATION_CHAIN = 6;
-  const chars = script.slice(1) as string[];
+  const chars = getCharacters(script);
   const confirmationChars = chars.filter(
     (char) =>
       considerations[char]?.tags.includes("self-confirming") ||
@@ -156,7 +157,7 @@ function confirmationChain(script: Script): ValidationResult | null {
 }
 
 function characterClashes(script: Script): ValidationResult[] {
-  const chars = script.slice(1) as string[];
+  const chars = getCharacters(script);
   const clashResults: ValidationResult[] = [];
   const processedPairs = new Set<string>();
 
@@ -191,7 +192,7 @@ function characterClashes(script: Script): ValidationResult[] {
 }
 
 function legion(script: Script): ValidationResult | null {
-  const chars = script.slice(1) as string[];
+  const chars = getCharacters(script);
   if (!chars.includes("legion")) return null;
   // const scriptHasVortox = chars.includes("vortox");
 
@@ -229,7 +230,7 @@ function legion(script: Script): ValidationResult | null {
 }
 
 function outsiderModification(script: Script): ValidationResult | null {
-  const chars = script.slice(1) as string[];
+  const chars = getCharacters(script);
   const outsiderModChars = chars.filter((char) => {
     const setup = considerations[char]?.setup;
     return setup?.outsiders !== undefined;
@@ -272,7 +273,7 @@ function outsiderModification(script: Script): ValidationResult | null {
 }
 
 function extraEvilPlayers(script: Script): ValidationResult | null {
-  const chars = script.slice(1) as string[];
+  const chars = getCharacters(script);
 
   // Don't activate this rule if Spirit of Ivory is on the script
   if (chars.includes("spiritofivory")) {
@@ -305,7 +306,7 @@ function extraEvilPlayers(script: Script): ValidationResult | null {
 }
 
 function onlyGoodExecutionProtection(script: Script): ValidationResult | null {
-  const chars = script.slice(1) as string[];
+  const chars = getCharacters(script);
 
   const executionProtectionChars = chars.filter((char) =>
     considerations[char]?.tags.includes("prevents-execution")
