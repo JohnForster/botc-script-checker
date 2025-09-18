@@ -94,21 +94,27 @@ export function App() {
 
   return (
     <div class="container">
-      <h1>Blood on the Clocktower Script Checker</h1>
+      <h1>Clocktower Custom Script Checker</h1>
 
       <p>
         A tool to help custom script writers spot potential issues early. This
-        is still very early in development, and it is impossible to catch every
-        issue with a script. There may be false positives, and it won't catch
-        every mistake. If you have any feedback, please let me know{" "}
+        is still <strong>very early in development</strong>, and it is
+        impossible to catch every issue with a script. There may be false
+        positives, and it won't catch every mistake.
+      </p>
+
+      <p>
         <strong>
-          <a href="https://forms.gle/D4sPXcXHy4v2o5CP8">here</a>
+          If you have any feedback, please let me know{" "}
+          <a href="https://forms.gle/D4sPXcXHy4v2o5CP8">
+            <strong>here</strong>
+          </a>
+          .
         </strong>
-        .
       </p>
 
       <div class="input-section">
-        <h2>Upload or Paste Script</h2>
+        <h2>Upload or Paste Custom Script</h2>
         <input
           type="file"
           accept=".json"
@@ -125,7 +131,7 @@ export function App() {
           rows={10}
         />
         <button onClick={handleValidate} class="validate-button">
-          Validate Script
+          Check Script
         </button>
       </div>
 
@@ -165,7 +171,7 @@ export function App() {
       {validationResults &&
         validationResults.length === 0 &&
         scriptText &&
-        !error && <div class="success">No validation issues found!</div>}
+        !error && <div class="success">No issues found!</div>}
     </div>
   );
 }

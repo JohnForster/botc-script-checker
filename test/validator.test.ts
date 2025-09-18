@@ -180,6 +180,29 @@ test("Validates a script with three or more extra evil sources", () => {
   );
 });
 
+test("Extra evil players rule does not activate with Spirit of Ivory", () => {
+  // Create a script with 3 extra evil characters but also Spirit of Ivory
+  const spiritOfIvoryScript: Script = [
+    { id: "_meta", author: "Test", name: "Spirit of Ivory Test" },
+    "washerwoman",
+    "librarian",
+    "investigator",
+    "chef",
+    "empath",
+    "bountyhunter", // can add evil
+    "ogre", // can add evil
+    "mezepheles", // can add evil
+    "spiritofivory", // prevents extra evil rule
+    "poisoner",
+    "imp",
+  ];
+
+  const results = validateScript(spiritOfIvoryScript);
+  const extraEvilResult = results.find((r) => r.id === "extra-evil");
+  // Should not trigger because Spirit of Ivory is present
+  expect(extraEvilResult).toBeUndefined();
+});
+
 test("Validates a script with confirmation chain", () => {
   // Create a script with many self-confirming/character-confirming roles (need >6)
   const confirmationChainScript: Script = [
@@ -231,7 +254,11 @@ test("Validates a script with Legion and overpowered characters", () => {
 test("Validates a script with only good execution protection", () => {
   // Create a script where all execution protection is good-aligned
   const onlyGoodExecutionProtectionScript: Script = [
-    { id: "_meta", author: "Test", name: "Only Good Execution Protection Test" },
+    {
+      id: "_meta",
+      author: "Test",
+      name: "Only Good Execution Protection Test",
+    },
     "washerwoman",
     "librarian",
     "investigator",
@@ -244,7 +271,9 @@ test("Validates a script with only good execution protection", () => {
   ];
 
   const results = validateScript(onlyGoodExecutionProtectionScript);
-  const executionProtectionResult = results.find((r) => r.id === "only-good-execution-protection");
+  const executionProtectionResult = results.find(
+    (r) => r.id === "only-good-execution-protection"
+  );
   expect(executionProtectionResult).toBeDefined();
   expect(executionProtectionResult?.severity).toBe("medium");
   expect(executionProtectionResult?.characters).toContain("fool");

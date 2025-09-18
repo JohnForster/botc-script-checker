@@ -1421,6 +1421,13 @@
     ],
     "requirements": {},
     "suggestions": {},
+    "clashes": [
+      {
+        "characters": ["goon"],
+        "reason": "RAW, a Summoner who chooses the Goon becomes drunk, meaning no demon is created and Evil lose. A custom bootlegger rule can prevent this.",
+        "severity": "medium"
+      }
+    ],
     "tags": ["change-character", "change-alignment"],
     "setup": { "demons": [-1] }
   },

@@ -261,6 +261,12 @@ function outsiderModification(script: Script): ValidationResult | null {
 
 function extraEvilPlayers(script: Script): ValidationResult | null {
   const chars = script.slice(1) as string[];
+
+  // Don't activate this rule if Spirit of Ivory is on the script
+  if (chars.includes("spiritofivory")) {
+    return null;
+  }
+
   const extraEvilChars = chars.filter((char) =>
     considerations[char]?.tags.includes("extra-evil")
   );
@@ -310,7 +316,8 @@ function onlyGoodExecutionProtection(script: Script): ValidationResult | null {
     return {
       severity: "medium",
       id: "only-good-execution-protection",
-      message: `All sources of execution protection are good-aligned, `,
+      message:
+        "All sources of execution protection are good-aligned, meaning that these characters can be hard-confirmed. Consider adding evil-aligned execution protection (eg. Devil's Advocate, Lleech, or Boffin).",
       characters: executionProtectionChars,
     };
   }
