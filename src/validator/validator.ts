@@ -15,6 +15,7 @@ export const FAILURES = {
   "character-clash": "Character Clash",
   "outsider-modification": "Outsider Modification",
   "extra-evil": "Extra Evil Players",
+  "only-good-execution-protection": "Only Good Execution Protection",
 };
 
 export type FailureID = keyof typeof FAILURES;
@@ -37,6 +38,7 @@ const CHECKS: ((
   outsiderModification,
   extraEvilPlayers,
   legion,
+  onlyGoodExecutionProtection,
 ];
 
 export function validateScript(script: Script): ValidationResult[] {
@@ -281,5 +283,36 @@ function extraEvilPlayers(script: Script): ValidationResult | null {
     };
   }
 
+  return null;
+}
+
+function onlyGoodExecutionProtection(script: Script): ValidationResult | null {
+  const chars = script.slice(1) as string[];
+
+  const executionProtectionChars = chars.filter((char) =>
+    considerations[char]?.tags.includes("prevents-execution")
+  );
+
+  const goodExecutionProtectionChars = executionProtectionChars.filter(
+    (char) =>
+      allCharacters[char].type === "outsider" ||
+      allCharacters[char].type === "townsfolk"
+  );
+
+  if (goodExecutionProtectionChars.length && chars.includes("boffin")) {
+    executionProtectionChars.push("boffin");
+  }
+
+  if (
+    executionProtectionChars.length > 0 &&
+    executionProtectionChars.length === goodExecutionProtectionChars.length
+  ) {
+    return {
+      severity: "medium",
+      id: "only-good-execution-protection",
+      message: `All sources of execution protection are good-aligned, `,
+      characters: executionProtectionChars,
+    };
+  }
   return null;
 }

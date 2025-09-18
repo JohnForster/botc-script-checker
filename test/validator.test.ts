@@ -180,6 +180,77 @@ test("Validates a script with three or more extra evil sources", () => {
   );
 });
 
+test("Validates a script with confirmation chain", () => {
+  // Create a script with many self-confirming/character-confirming roles (need >6)
+  const confirmationChainScript: Script = [
+    { id: "_meta", author: "Test", name: "Confirmation Chain Test" },
+    "washerwoman", // character-confirmation
+    "librarian", // character-confirmation
+    "undertaker", // character-confirmation
+    "ravenkeeper", // character-confirmation
+    "dreamer", // character-confirmation
+    "cannibal", // character-confirmation
+    "juggler", // character-confirmation
+    "nightwatchman", // self-confirming
+    "poisoner",
+    "imp",
+  ];
+
+  const results = validateScript(confirmationChainScript);
+  const confirmationResult = results.find((r) => r.id === "confirmation-chain");
+  expect(confirmationResult).toBeDefined();
+  expect(confirmationResult?.severity).toBe("medium");
+  expect(confirmationResult?.characters.length).toBeGreaterThan(6);
+});
+
+test("Validates a script with Legion and overpowered characters", () => {
+  // Create a script with Legion and characters that are overpowered with it
+  const legionScript: Script = [
+    { id: "_meta", author: "Test", name: "Legion Test" },
+    "slayer", // overpowered with Legion
+    "artist", // overpowered without Vortox
+    "chef", // overpowered without Vortox
+    "empath", // overpowered without Vortox
+    "noble", // overpowered without Vortox
+    "poisoner",
+    "legion",
+  ];
+
+  const results = validateScript(legionScript);
+  const legionResult = results.find((r) => r.id === "legion");
+  expect(legionResult).toBeDefined();
+  expect(legionResult?.severity).toBe("high");
+  expect(legionResult?.characters).toContain("legion");
+  expect(legionResult?.characters).toContain("slayer");
+  expect(legionResult?.characters).toContain("artist");
+  expect(legionResult?.message).toBe(
+    "These characters are overpowered in Legion scripts. Consider removing these characters."
+  );
+});
+
+test("Validates a script with only good execution protection", () => {
+  // Create a script where all execution protection is good-aligned
+  const onlyGoodExecutionProtectionScript: Script = [
+    { id: "_meta", author: "Test", name: "Only Good Execution Protection Test" },
+    "washerwoman",
+    "librarian",
+    "investigator",
+    "chef",
+    "empath",
+    "fool", // prevents-execution (townsfolk)
+    "pacifist", // prevents-execution (townsfolk)
+    "poisoner",
+    "imp",
+  ];
+
+  const results = validateScript(onlyGoodExecutionProtectionScript);
+  const executionProtectionResult = results.find((r) => r.id === "only-good-execution-protection");
+  expect(executionProtectionResult).toBeDefined();
+  expect(executionProtectionResult?.severity).toBe("medium");
+  expect(executionProtectionResult?.characters).toContain("fool");
+  expect(executionProtectionResult?.characters).toContain("pacifist");
+});
+
 test("Official scripts pass validation", () => {
   const TBresults = validateScript(Scripts.troubleBrewing);
   expect.soft(TBresults).toHaveLength(0);
