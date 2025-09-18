@@ -77,7 +77,7 @@ function misinformation(script: Script): ValidationResult | null {
     };
   }
 
-  if (misinfoChars.length < MIN_MISINFORMATION) {
+  if (misinfoChars.length < MIN_MISINFORMATION && !chars.includes("fibbin")) {
     return {
       severity: "low",
       id: "misinfo",
