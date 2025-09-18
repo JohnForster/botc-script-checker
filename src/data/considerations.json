@@ -783,12 +783,12 @@
       {
         "characters": ["lilmonsta"],
         "reason": "The Lil Monsta renders the Knight effectively useless",
-        "severity": "high"
+        "severity": "medium"
       },
       {
         "characters": ["summoner"],
-        "reason": "The Summoner can create Lil Monsta, rendering the Knight effectively useless",
-        "severity": "high"
+        "reason": "As there is no demon night 1, the Knight is effectively useless if there is a Summoner in play",
+        "severity": "medium"
       }
     ],
     "tags": ["YSK"],
@@ -1122,6 +1122,13 @@
     ],
     "requirements": {},
     "suggestions": {},
+    "clashes": [
+      {
+        "characters": ["drunk"],
+        "reason": "The Pit-Hag being able to create a drunk is very powerful.",
+        "severity": "medium"
+      }
+    ],
     "tags": ["change-character"],
     "setup": {}
   },
