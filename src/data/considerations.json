@@ -38,7 +38,19 @@
     "tags": ["declaration", "alt-good-win-con"],
     "requirements": {},
     "suggestions": {},
-    "setup": {}
+    "setup": {},
+    "clashes": [
+      {
+        "characters": ["imp"],
+        "reason": "The Al Saahir struggles against moving demons like the Imp.",
+        "severity": "low"
+      },
+      {
+        "characters": ["fanggu"],
+        "reason": "The Al Saahir struggles against moving demons like the Fang Gu.",
+        "severity": "low"
+      }
+    ]
   },
   "amnesiac": {
     "jinxes": [],
@@ -98,7 +110,7 @@
     "clashes": [
       {
         "characters": ["poisoner"],
-        "reason": "A balloonist can be rendered effectively useless by a single random poisoning.",
+        "reason": "A single random poison at any time can be incredibly damaging to a Balloonist.",
         "severity": "low"
       }
     ],
@@ -1155,7 +1167,7 @@
     "jinxes": ["boffin", "pit-hag", "vizier"],
     "requirements": {},
     "suggestions": {},
-    "tags": ["shy-outsider", "change-alignment"],
+    "tags": ["shy-outsider", "change-alignment", "extra-evil"],
     "setup": {}
   },
   "poppygrower": {

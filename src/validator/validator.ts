@@ -98,6 +98,12 @@ function singleResurrectionSource(script: Script): ValidationResult | null {
     considerations[char]?.tags.includes("resurrection")
   );
   if (resurrectionChars.length === 1) {
+    // If the single source of resurrection is the only demon on the script, ignore this warning.
+    const charIsOnlyDemon =
+      allCharacters[resurrectionChars[0]].type === "demon" &&
+      chars.filter((c) => allCharacters[c].type === "demon").length === 1;
+    if (charIsOnlyDemon) return null;
+
     return {
       severity: "medium",
       id: "single-resurrection",
@@ -114,6 +120,12 @@ function singleExtraDeathSource(script: Script): ValidationResult | null {
     considerations[char]?.tags.includes("extra-death")
   );
   if (extraDeathChars.length === 1) {
+    // If the single source of extra death is the only demon on the script, ignore this warning.
+    const charIsOnlyDemon =
+      allCharacters[extraDeathChars[0]].type === "demon" &&
+      chars.filter((c) => allCharacters[c].type === "demon").length === 1;
+    if (charIsOnlyDemon) return null;
+
     return {
       severity: "medium",
       id: "single-extra-death",
@@ -148,30 +160,30 @@ function characterClashes(script: Script): ValidationResult[] {
   const clashResults: ValidationResult[] = [];
   const processedPairs = new Set<string>();
 
-  for (const char of chars) {
+  scriptCharLoop: for (const char of chars) {
     const clashes = considerations[char]?.clashes;
-    if (!clashes) continue;
+    if (!clashes) continue scriptCharLoop;
 
-    for (const clash of clashes) {
-      const foundClashChars = clash.characters.filter((clashChar) =>
+    clashLoop: for (const clash of clashes) {
+      const clashingChars = clash.characters.filter((clashChar) =>
         chars.includes(clashChar)
       );
 
-      if (foundClashChars.length > 0) {
-        for (const clashChar of foundClashChars) {
-          // Create a sorted pair key to avoid duplicate clashes
-          const pairKey = [char, clashChar].sort().join(",");
-          if (!processedPairs.has(pairKey)) {
-            processedPairs.add(pairKey);
+      if (!clashingChars.length) continue clashLoop;
 
-            clashResults.push({
-              severity: clash.severity,
-              id: "character-clash",
-              message: clash.reason,
-              characters: [char, clashChar],
-            });
-          }
-        }
+      clashCharLoop: for (const clashChar of clashingChars) {
+        // Create a sorted pair key to avoid duplicate clashes
+        const pairKey = [char, clashChar].sort().join(",");
+        if (processedPairs.has(pairKey)) continue clashCharLoop;
+
+        processedPairs.add(pairKey);
+
+        clashResults.push({
+          severity: clash.severity,
+          id: "character-clash",
+          message: clash.reason,
+          characters: [char, clashChar],
+        });
       }
     }
   }
@@ -275,7 +287,7 @@ function extraEvilPlayers(script: Script): ValidationResult | null {
     return {
       severity: "high",
       id: "extra-evil",
-      message: `There are ${extraEvilChars.length} characters that can add extra evil players. This may make the game unbalanced in favor of evil.`,
+      message: `There are ${extraEvilChars.length} characters that can add extra evil players. This is unbalanced in favor of evil. Consider adding the Spirit of Ivory to prevent this.`,
       characters: extraEvilChars,
     };
   }
@@ -284,7 +296,7 @@ function extraEvilPlayers(script: Script): ValidationResult | null {
     return {
       severity: "medium",
       id: "extra-evil",
-      message: `There are ${extraEvilChars.length} characters that can add extra evil players. Consider if this provides enough balance for the good team.`,
+      message: `There are ${extraEvilChars.length} characters that can add extra evil players. This may make the game unbalanced in favor of evil, consider adding the Spirit of Ivory to prevent this.`,
       characters: extraEvilChars,
     };
   }
