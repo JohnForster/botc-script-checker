@@ -68,8 +68,17 @@ export function App() {
       const results = validateScript(script);
       setScript(script);
       setValidationResults(results);
+      
+      // Scroll to bottom of page after validation
+      setTimeout(() => {
+        window.scrollTo({ top: document.body.scrollHeight, behavior: 'smooth' });
+      }, 100);
     } catch (e) {
       setError("Invalid JSON format");
+      // Also scroll on error to show the error message
+      setTimeout(() => {
+        window.scrollTo({ top: document.body.scrollHeight, behavior: 'smooth' });
+      }, 100);
     }
   };
 

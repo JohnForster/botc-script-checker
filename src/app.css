@@ -243,6 +243,8 @@
 }
 
 .result-characters {
+  margin-top: auto;
+  margin-bottom: auto;
   font-family: monospace;
   font-size: 14px;
 }
