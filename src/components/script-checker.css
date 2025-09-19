@@ -75,6 +75,9 @@
   background: #5358d4;
 }
 
+.validate-button:disabled {
+  background: gray;
+}
 .error {
   padding: 1rem;
   border: 1px solid;

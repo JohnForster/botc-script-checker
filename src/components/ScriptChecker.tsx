@@ -1,10 +1,5 @@
-import { useState } from "preact/hooks";
-import {
-  ALL_CHARACTERS,
-  FAILURES,
-  validateScript,
-  type ValidationResult,
-} from "../validator/validator";
+import { useEffect, useState } from "preact/hooks";
+import { type ValidationResult } from "../validator/validator";
 import type { Script } from "../types/types";
 import { getName } from "../types/script";
 
@@ -16,10 +11,16 @@ function ScriptChecker() {
   const [validationResults, setValidationResults] = useState<
     ValidationResult[] | null
   >(null);
+  const [Validator, setValidator] = useState<
+    typeof import("../validator/validator") | null
+  >(null);
   const [error, setError] = useState<string | null>(null);
 
+  useEffect(() => {
+    import("../validator/validator").then((obj) => setValidator(obj));
+  }, []);
+
   const handleFileUpload = (event: Event) => {
-    console.log("File upload event:", event);
     const target = event.target as HTMLInputElement;
     const file = target.files?.[0];
     if (file) {
@@ -43,10 +44,15 @@ function ScriptChecker() {
       return;
     }
 
+    if (!Validator) {
+      setError("Error loading validator");
+      return;
+    }
+
     try {
       const script: Script = JSON.parse(scriptText);
 
-      const results = validateScript(script);
+      const results = Validator.validateScript(script);
       setScript(script);
       setValidationResults(results);
 
@@ -83,7 +89,8 @@ function ScriptChecker() {
   };
 
   const getCharacterName = (characterId: string): string => {
-    const character = ALL_CHARACTERS[characterId];
+    if (!Validator) return "";
+    const character = Validator.ALL_CHARACTERS[characterId];
     return character?.name || characterId;
   };
 
@@ -107,8 +114,12 @@ function ScriptChecker() {
           class="script-textarea"
           rows={10}
         />
-        <button onClick={handleValidate} class="validate-button">
-          Check Script
+        <button
+          onClick={handleValidate}
+          disabled={!Validator}
+          class="validate-button"
+        >
+          {Validator ? "Check Script" : "Loading..."}
         </button>
       </div>
 
@@ -118,7 +129,7 @@ function ScriptChecker() {
         </div>
       )}
 
-      {validationResults && validationResults.length > 0 && (
+      {Validator && validationResults && validationResults.length > 0 && (
         <div class="results-section">
           <h2>{script && getName(script)} - Results</h2>
           <div class="results-summary">
@@ -134,7 +145,7 @@ function ScriptChecker() {
                 <span class="severity-badge">
                   {result.severity.toUpperCase()}
                 </span>
-                <div class="result-id">{FAILURES[result.id]}: </div>
+                <div class="result-id">{Validator.FAILURES[result.id]}: </div>
                 <div class="result-characters">
                   {result.characters.map(getCharacterName).join(", ")}
                 </div>
