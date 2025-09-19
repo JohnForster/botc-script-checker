@@ -1,3 +1,4 @@
+import { removeNulls } from "../utils";
 import type {
   BloodOnTheClocktowerCustomScript,
   OfficialCharacterDeprecated,
@@ -7,7 +8,7 @@ import type {
 } from "./schema";
 
 export function getCharacters(script: BloodOnTheClocktowerCustomScript) {
-  return script.map(getCharacterID).filter((x): x is Lowercase<string> => !!x);
+  return removeNulls(script.map(getCharacterID));
 }
 
 type ScriptElement =

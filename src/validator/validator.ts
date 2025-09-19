@@ -1,11 +1,11 @@
 import type { Script } from "../types/types";
-import considerationsJSON from "../data/considerations.json";
-import type { ConsiderationsData } from "../data/considerations.d.ts";
-const considerations = considerationsJSON as ConsiderationsData;
-import compiledCharactersJSON from "../data/compiled_characters.json";
-import type { CompiledCharactersData } from "../data/compiled_characters";
+// import { considerations } from "../data/considerations.ts";
 import { getCharacters } from "../types/script.ts";
-const allCharacters = compiledCharactersJSON as CompiledCharactersData;
+import type { CharacterID } from "../types/schema.ts";
+import { considerations } from "../data/considerations.ts";
+import { ALL_CHARACTERS } from "../data/all_characters.ts";
+
+export { ALL_CHARACTERS };
 
 export const FAILURES = {
   misinfo: "Misinformation",
@@ -101,8 +101,8 @@ function singleResurrectionSource(script: Script): ValidationResult | null {
   if (resurrectionChars.length === 1) {
     // If the single source of resurrection is the only demon on the script, ignore this warning.
     const charIsOnlyDemon =
-      allCharacters[resurrectionChars[0]].type === "demon" &&
-      chars.filter((c) => allCharacters[c].type === "demon").length === 1;
+      ALL_CHARACTERS[resurrectionChars[0]].type === "demon" &&
+      chars.filter((c) => ALL_CHARACTERS[c].type === "demon").length === 1;
     if (charIsOnlyDemon) return null;
 
     return {
@@ -123,8 +123,8 @@ function singleExtraDeathSource(script: Script): ValidationResult | null {
   if (extraDeathChars.length === 1) {
     // If the single source of extra death is the only demon on the script, ignore this warning.
     const charIsOnlyDemon =
-      allCharacters[extraDeathChars[0]].type === "demon" &&
-      chars.filter((c) => allCharacters[c].type === "demon").length === 1;
+      ALL_CHARACTERS[extraDeathChars[0]].type === "demon" &&
+      chars.filter((c) => ALL_CHARACTERS[c].type === "demon").length === 1;
     if (charIsOnlyDemon) return null;
 
     return {
@@ -159,7 +159,7 @@ function confirmationChain(script: Script): ValidationResult | null {
 function characterClashes(script: Script): ValidationResult[] {
   const chars = getCharacters(script);
   const clashResults: ValidationResult[] = [];
-  const processedPairs = new Set<string>();
+  const processedPairs = new Set<CharacterID>();
 
   scriptCharLoop: for (const char of chars) {
     const clashes = considerations[char]?.clashes;
@@ -174,7 +174,7 @@ function characterClashes(script: Script): ValidationResult[] {
 
       clashCharLoop: for (const clashChar of clashingChars) {
         // Create a sorted pair key to avoid duplicate clashes
-        const pairKey = [char, clashChar].sort().join(",");
+        const pairKey = [char, clashChar].sort().join(",") as Lowercase<string>;
         if (processedPairs.has(pairKey)) continue clashCharLoop;
 
         processedPairs.add(pairKey);
@@ -247,7 +247,7 @@ function outsiderModification(script: Script): ValidationResult | null {
 
   if (
     outsiderModChars.length == 1 &&
-    allCharacters[outsiderModChars[0]].type == "demon"
+    ALL_CHARACTERS[outsiderModChars[0]].type == "demon"
   ) {
     return {
       severity: "medium",
@@ -314,8 +314,8 @@ function onlyGoodExecutionProtection(script: Script): ValidationResult | null {
 
   const goodExecutionProtectionChars = executionProtectionChars.filter(
     (char) =>
-      allCharacters[char].type === "outsider" ||
-      allCharacters[char].type === "townsfolk"
+      ALL_CHARACTERS[char].type === "outsider" ||
+      ALL_CHARACTERS[char].type === "townsfolk"
   );
 
   if (goodExecutionProtectionChars.length && chars.includes("boffin")) {

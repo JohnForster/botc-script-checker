@@ -1,3 +1,5 @@
+import type { CharacterID } from "../types/schema";
+
 export interface CharacterConsiderations {
   /**
    * Characters that have mechanical conflicts (jinxes) with this character
@@ -7,22 +9,12 @@ export interface CharacterConsiderations {
   /**
    * Mandatory conditions that must be met when including this character
    */
-  requirements: {
-    /** Number of drunk/poisoned players requirement */
-    droisoning?: string;
-    /** Specific character that must be present */
-    character?: string;
-    /** Number of outsiders requirement */
-    outsiders?: string;
-  };
+  requirements?: Constraint[];
 
   /**
    * Recommended conditions for optimal game balance
    */
-  suggestions: {
-    /** Recommended number of drunk/poisoned players */
-    droisoning?: string;
-  };
+  suggestions?: Constraint[];
 
   /**
    * Behavioral tags that categorize the character's effects
@@ -49,10 +41,21 @@ export interface CharacterConsiderations {
   clashes?: Clash[];
 }
 
+export type Constraint = {
+  /** The `tag` field can include character types IDs or IDs */
+  tag: string | string[];
+  operator: "==" | "<" | "<=" | ">" | ">=";
+  value: number;
+  message: string;
+  severity: Severity;
+};
+
+export type Severity = "low" | "medium" | "high";
+
 export type Clash = {
-  characters: string[];
+  characters: CharacterID[];
   reason: string;
-  severity: "low" | "medium" | "high";
+  severity: Severity;
 };
 
 /**
@@ -61,6 +64,3 @@ export type Clash = {
 export type ConsiderationsData = {
   [characterId: string]: CharacterConsiderations;
 };
-
-declare const considerations: ConsiderationsData;
-export default considerations;

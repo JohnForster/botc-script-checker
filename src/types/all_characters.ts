@@ -51,11 +51,8 @@ export interface Character {
 }
 
 /**
- * Complete compiled characters data mapping character IDs to their information
+ * Complete all characters data mapping character IDs to their information
  */
-export type CompiledCharactersData = {
+export type AllCharactersData = {
   [characterId: string]: Character;
 };
-
-declare const compiledCharacters: CompiledCharactersData;
-export default compiledCharacters;
