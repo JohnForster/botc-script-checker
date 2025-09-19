@@ -352,6 +352,15 @@ export const considerations: ConsiderationsData = {
     setup: {},
   },
   dreamer: {
+    suggestions: [
+      {
+        tag: ["causes-droisoning"],
+        operator: ">",
+        value: 3,
+        message: "The Dreamer is very powerful without sufficient droisoning",
+        severity: "low",
+      },
+    ],
     jinxes: [],
     tags: ["each-night", "ongoing-info", "character-confirmation"],
     setup: {},
@@ -394,6 +403,16 @@ export const considerations: ConsiderationsData = {
   fanggu: {
     jinxes: ["scarletwoman"],
     tags: ["change-character", "extra-evil"],
+    suggestions: [
+      {
+        tag: ["shy-outsider"],
+        operator: ">=",
+        value: 2,
+        message:
+          "The Fang Gu works best with multiple shy outsiders, such as the Mutant, Sweetheart or Politican.",
+        severity: "low",
+      },
+    ],
     clashes: [
       {
         characters: ["drunk"],
@@ -967,7 +986,7 @@ export const considerations: ConsiderationsData = {
       {
         characters: ["drunk"],
         reason: "The Pit-Hag being able to create a drunk is very powerful.",
-        severity: "medium",
+        severity: "low",
       },
     ],
     tags: ["change-character"],
@@ -1341,6 +1360,32 @@ export const considerations: ConsiderationsData = {
   zombuul: {
     jinxes: ["summoner"],
     tags: ["extending"],
+    suggestions: [
+      {
+        tag: "po",
+        operator: "==",
+        value: 1,
+        severity: "low",
+        message:
+          "The Zombuul works best paired with a Po, to provide cover for nights with no deaths.",
+      },
+      {
+        tag: ["prevents-night-death", "prevents-demon-kills"],
+        operator: ">=",
+        value: 5,
+        severity: "medium",
+        message:
+          "The Zombuul works best with multiple reasons for no deaths in the night, consider adding protection characters",
+      },
+      {
+        tag: ["extra-death", "extra-kill"],
+        operator: ">=",
+        value: 3,
+        severity: "medium",
+        message:
+          "The Zombuul works best when their existence can be hidden by other causes of death at night eg. with the Gossip, Assassin, Tinker",
+      },
+    ],
     setup: {},
   },
 };

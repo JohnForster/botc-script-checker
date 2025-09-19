@@ -1,6 +1,6 @@
 import type { Script } from "../src/types/types";
 
-import { expect, test } from "vitest";
+import { expect, expectTypeOf, test } from "vitest";
 import { validateScript } from "../src/validator/validator";
 import * as Scripts from "./scripts";
 
@@ -374,6 +374,7 @@ test("Requirements and suggestions pass when constraints are met", () => {
   ];
 
   const results = validateScript(scriptWithEnoughDroisoning);
+  console.log("results:", results);
   const constraintResults = results.filter(
     (r) => r.id === "requirements" || r.id === "suggestions"
   );
@@ -383,6 +384,38 @@ test("Requirements and suggestions pass when constraints are met", () => {
     r.characters.includes("acrobat")
   );
   expect(acrobatConstraintResults).toHaveLength(0);
+});
+
+test("Suggestions pass when multiple tags are given", () => {
+  const scriptWithMixedTags: Script = [
+    { id: "_meta", author: "Test", name: "Acrobat With Droisoning Test" },
+    "tealady", // Prevent demon kill
+    "sailor", // Prevent demon kill
+    "innkeeper", // Prevent demon kill
+    "tinker", // Extra Death
+    "assassin", // Extra Death
+    "po", // Prevent demon kill, Extra Death
+    "zombuul",
+  ];
+
+  const results = validateScript(scriptWithMixedTags);
+  const constraintResults = results.filter(
+    (r) =>
+      r.id === "requirements" ||
+      (r.id === "suggestions" && r.characters.includes("zombuul"))
+  );
+  console.log("constraintResults (expecting 1):", constraintResults);
+  expect(constraintResults.length).toEqual(1);
+
+  scriptWithMixedTags.push("monk"); // Add a monk, this should fix the problem.
+  const results2 = validateScript(scriptWithMixedTags);
+  const constraintResults2 = results2.filter(
+    (r) =>
+      r.id === "requirements" ||
+      (r.id === "suggestions" && r.characters.includes("zombuul"))
+  );
+  console.log("constraintResults2 (expecting 0):", constraintResults2);
+  expect(constraintResults2.length).toEqual(0);
 });
 
 test("Official scripts pass validation", () => {

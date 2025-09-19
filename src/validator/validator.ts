@@ -1,10 +1,11 @@
 import type { Script } from "../types/types";
 // import { considerations } from "../data/considerations.ts";
 import { getCharacters } from "../types/script.ts";
-import type { CharacterID } from "../types/schema.ts";
+import type { CharacterID, ScriptMetadata } from "../types/schema.ts";
 import { considerations } from "../data/considerations.ts";
 import { ALL_CHARACTERS } from "../data/all_characters.ts";
 import type { Constraint } from "../types/considerations.ts";
+import { sortScript } from "./script_sorter";
 
 export { ALL_CHARACTERS };
 
@@ -20,6 +21,7 @@ export const FAILURES = {
   "only-good-execution-protection": "Only Good Execution Protection",
   suggestions: "Character Suggestion",
   requirements: "Character Requirement Not Met",
+  "script-order": "Script Order",
 };
 
 export type FailureID = keyof typeof FAILURES;
@@ -45,6 +47,7 @@ const CHECKS: ((
   onlyGoodExecutionProtection,
   checkRequirements,
   checkSuggestions,
+  checkScriptOrder,
 ];
 
 export function validateScript(script: Script): ValidationResult[] {
@@ -350,6 +353,7 @@ function evaluateConstraint(
 ): boolean {
   const chars = getCharacters(script);
   const count = getConstraintCount(chars, constraint.tag);
+  console.log("Tag, count:", constraint.tag, count);
 
   switch (constraint.operator) {
     case "==":
@@ -368,6 +372,7 @@ function evaluateConstraint(
 }
 
 function getConstraintCount(chars: string[], tag: string | string[]): number {
+  // ! THIS IS INCORRECT. IT SHOULD CALL getConstraintCountSingle FUNCTION FOR EACH TAG IN THE LIST
   if (Array.isArray(tag)) {
     // Tag array - count characters that have any of these tags
     return chars.filter((char) =>
@@ -389,7 +394,12 @@ function getConstraintCount(chars: string[], tag: string | string[]): number {
   }
 
   // Tag is a specific character ID
-  return chars.includes(tag) ? 1 : 0;
+  if (ALL_CHARACTERS[tag]) {
+    return chars.includes(tag) ? 1 : 0;
+  }
+
+  // Tag is a single tag
+  return chars.filter((char) => considerations[char].tags.includes(tag)).length;
 }
 
 function checkSuggestions(script: Script): ValidationResult[] {
@@ -436,4 +446,34 @@ function checkRequirements(script: Script): ValidationResult[] {
   }
 
   return results;
+}
+
+function checkScriptOrder(script: Script): ValidationResult | null {
+  const metadata = script.find(
+    (char): char is ScriptMetadata =>
+      typeof char !== "string" && char?.id === "_meta"
+  );
+  if (metadata?.author === "The Pandemonium Institute") {
+    return null;
+  }
+
+  // Get the correctly sorted version of the script
+  const sortedScript = sortScript(script);
+
+  // Compare the original script with the sorted version
+  // We use JSON.stringify for deep comparison since the script can contain objects
+  const isCorrectOrder =
+    JSON.stringify(script) === JSON.stringify(sortedScript);
+
+  if (!isCorrectOrder) {
+    return {
+      severity: "low",
+      id: "script-order",
+      message:
+        "The script is not in the correct sort order. You can use the sort button on the script tool to correctly sort this script.",
+      characters: [],
+    };
+  }
+
+  return null;
 }
