@@ -95,7 +95,7 @@ test("Validates a script with insufficient outsider modification", () => {
   expect(outsiderModResult?.characters).toHaveLength(1);
   expect(outsiderModResult?.characters).toContain("godfather");
   expect(outsiderModResult?.message).toBe(
-    "If their is only one source of outsider modification, consider including more shy outsiders to hide this (eg. Mutant, Sweetheart, Barber)."
+    "If there is only one source of outsider modification, consider including more shy outsiders to hide this (eg. Mutant, Sweetheart, Barber)."
   );
 });
 
@@ -279,6 +279,110 @@ test("Validates a script with only good execution protection", () => {
   expect(executionProtectionResult?.severity).toBe("medium");
   expect(executionProtectionResult?.characters).toContain("fool");
   expect(executionProtectionResult?.characters).toContain("pacifist");
+});
+
+test("Validates requirements constraints", () => {
+  // Test acrobat requirements - needs droisoning characters
+  const scriptWithoutDroisoning: Script = [
+    { id: "_meta", author: "Test", name: "Acrobat Without Droisoning Test" },
+    "acrobat",
+    "washerwoman",
+    "librarian",
+    "investigator",
+    "chef",
+    "empath",
+    "imp",
+  ];
+
+  const results = validateScript(scriptWithoutDroisoning);
+  const requirementResults = results.filter((r) => r.id === "requirements");
+
+  expect(requirementResults).toHaveLength(1);
+  expect(requirementResults[0].severity).toBe("high");
+  expect(requirementResults[0].characters).toContain("acrobat");
+  expect(requirementResults[0].message).toBe(
+    "The Acrobat is useless in a script without droisoning."
+  );
+});
+
+test("Validates baron outsider requirements", () => {
+  // Test baron requirements - needs >= 4 outsiders
+  const scriptWithFewOutsiders: Script = [
+    { id: "_meta", author: "Test", name: "Baron Few Outsiders Test" },
+    "baron",
+    "washerwoman",
+    "librarian",
+    "investigator",
+    "chef",
+    "empath",
+    "butler", // outsider
+    "recluse", // outsider
+    "imp",
+  ];
+
+  const results = validateScript(scriptWithFewOutsiders);
+  const requirementResults = results.filter((r) => r.id === "requirements");
+
+  expect(requirementResults).toHaveLength(1);
+  expect(requirementResults[0].severity).toBe("medium");
+  expect(requirementResults[0].characters).toContain("baron");
+  expect(requirementResults[0].message).toContain(
+    "If there are fewer than 4 outsiders"
+  );
+});
+
+test("Validates suggestions constraints", () => {
+  // Test acrobat suggestions - recommends > 4 droisoning characters
+  const scriptWithLittleDroisoning: Script = [
+    { id: "_meta", author: "Test", name: "Acrobat Little Droisoning Test" },
+    "acrobat",
+    "washerwoman",
+    "librarian",
+    "investigator",
+    "chef",
+    "empath",
+    "poisoner", // causes droisoning (1 source)
+    "imp",
+  ];
+
+  const results = validateScript(scriptWithLittleDroisoning);
+  const suggestionResults = results.filter((r) => r.id === "suggestions");
+
+  expect(suggestionResults).toHaveLength(1);
+  expect(suggestionResults[0].severity).toBe("medium");
+  expect(suggestionResults[0].characters).toContain("acrobat");
+  expect(suggestionResults[0].message).toBe(
+    "The Acrobat doesn't function well in scripts without much droisoning."
+  );
+});
+
+test("Requirements and suggestions pass when constraints are met", () => {
+  // Test script that meets acrobat requirements and suggestions (needs > 4 droisoning characters)
+  const scriptWithEnoughDroisoning: Script = [
+    { id: "_meta", author: "Test", name: "Acrobat With Droisoning Test" },
+    "acrobat",
+    "washerwoman",
+    "librarian",
+    "investigator",
+    "chef",
+    "courtier", // causes droisoning
+    "goon", // causes droisoning
+    "poisoner", // causes droisoning
+    "pukka", // causes droisoning
+    "minstrel", // causes droisoning
+    "imp",
+  ];
+
+  const results = validateScript(scriptWithEnoughDroisoning);
+  const constraintResults = results.filter(
+    (r) => r.id === "requirements" || r.id === "suggestions"
+  );
+
+  // Should have no constraint violations for acrobat
+  const acrobatConstraintResults = constraintResults.filter((r) =>
+    r.characters.includes("acrobat")
+  );
+  expect(acrobatConstraintResults).toHaveLength(0);
 });
 
 test("Official scripts pass validation", () => {

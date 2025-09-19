@@ -4,6 +4,7 @@ import { getCharacters } from "../types/script.ts";
 import type { CharacterID } from "../types/schema.ts";
 import { considerations } from "../data/considerations.ts";
 import { ALL_CHARACTERS } from "../data/all_characters.ts";
+import type { Constraint } from "../types/considerations.ts";
 
 export { ALL_CHARACTERS };
 
@@ -17,6 +18,8 @@ export const FAILURES = {
   "outsider-modification": "Outsider Modification",
   "extra-evil": "Extra Evil Players",
   "only-good-execution-protection": "Only Good Execution Protection",
+  suggestions: "Character Suggestion",
+  requirements: "Character Requirement Not Met",
 };
 
 export type FailureID = keyof typeof FAILURES;
@@ -40,6 +43,8 @@ const CHECKS: ((
   extraEvilPlayers,
   legion,
   onlyGoodExecutionProtection,
+  checkRequirements,
+  checkSuggestions,
 ];
 
 export function validateScript(script: Script): ValidationResult[] {
@@ -236,7 +241,7 @@ function outsiderModification(script: Script): ValidationResult | null {
     return setup?.outsiders !== undefined;
   });
 
-  if (outsiderModChars.length == 0) {
+  if (outsiderModChars.length === 0) {
     return {
       severity: "medium",
       id: "outsider-modification",
@@ -246,8 +251,8 @@ function outsiderModification(script: Script): ValidationResult | null {
   }
 
   if (
-    outsiderModChars.length == 1 &&
-    ALL_CHARACTERS[outsiderModChars[0]].type == "demon"
+    outsiderModChars.length === 1 &&
+    ALL_CHARACTERS[outsiderModChars[0]].type === "demon"
   ) {
     return {
       severity: "medium",
@@ -264,7 +269,7 @@ function outsiderModification(script: Script): ValidationResult | null {
     return {
       severity: "medium",
       id: "outsider-modification",
-      message: `If their is only one source of outsider modification, consider including more shy outsiders to hide this (eg. Mutant, Sweetheart, Barber).`,
+      message: `If there is only one source of outsider modification, consider including more shy outsiders to hide this (eg. Mutant, Sweetheart, Barber).`,
       characters: outsiderModChars,
     };
   }
@@ -335,4 +340,100 @@ function onlyGoodExecutionProtection(script: Script): ValidationResult | null {
     };
   }
   return null;
+}
+
+// Utility functions for constraint evaluation
+function evaluateConstraint(
+  script: Script,
+  constraint: Constraint,
+  _triggeringCharacter: string
+): boolean {
+  const chars = getCharacters(script);
+  const count = getConstraintCount(chars, constraint.tag);
+
+  switch (constraint.operator) {
+    case "==":
+      return count === constraint.value;
+    case "<":
+      return count < constraint.value;
+    case "<=":
+      return count <= constraint.value;
+    case ">":
+      return count > constraint.value;
+    case ">=":
+      return count >= constraint.value;
+    default:
+      return false;
+  }
+}
+
+function getConstraintCount(chars: string[], tag: string | string[]): number {
+  if (Array.isArray(tag)) {
+    // Tag array - count characters that have any of these tags
+    return chars.filter((char) =>
+      tag.some((t) => considerations[char]?.tags.includes(t))
+    ).length;
+  }
+
+  // Check if tag is a character type
+  const characterTypes = [
+    "townsfolk",
+    "outsider",
+    "minion",
+    "demon",
+    "traveller",
+    "fabled",
+  ];
+  if (characterTypes.includes(tag)) {
+    return chars.filter((char) => ALL_CHARACTERS[char]?.type === tag).length;
+  }
+
+  // Tag is a specific character ID
+  return chars.includes(tag) ? 1 : 0;
+}
+
+function checkSuggestions(script: Script): ValidationResult[] {
+  const chars = getCharacters(script);
+  const results: ValidationResult[] = [];
+
+  for (const char of chars) {
+    const suggestions = considerations[char]?.suggestions;
+    if (!suggestions) continue;
+
+    for (const suggestion of suggestions) {
+      if (!evaluateConstraint(script, suggestion, char)) {
+        results.push({
+          severity: suggestion.severity,
+          id: "suggestions",
+          message: suggestion.message,
+          characters: [char],
+        });
+      }
+    }
+  }
+
+  return results;
+}
+
+function checkRequirements(script: Script): ValidationResult[] {
+  const chars = getCharacters(script);
+  const results: ValidationResult[] = [];
+
+  for (const char of chars) {
+    const requirements = considerations[char]?.requirements;
+    if (!requirements) continue;
+
+    for (const requirement of requirements) {
+      if (!evaluateConstraint(script, requirement, char)) {
+        results.push({
+          severity: requirement.severity,
+          id: "requirements",
+          message: requirement.message,
+          characters: [char],
+        });
+      }
+    }
+  }
+
+  return results;
 }
