@@ -12,6 +12,21 @@
   text-align: left;
 }
 
+.main-heading {
+  display: flex;
+  gap: 2rem;
+}
+
+.main-heading h1 {
+  margin: 0;
+  align-items: center;
+}
+
+footer {
+  font-size: small;
+  color: slategray;
+}
+
 .logo {
   height: 6em;
   padding: 1.5em;

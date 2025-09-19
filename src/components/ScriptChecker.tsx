@@ -4,9 +4,10 @@ import type { Script } from "../types/types";
 import { getName } from "../types/script";
 
 import "./script-checker.css";
+import { defaultText } from "./defaultText";
 
 function ScriptChecker() {
-  const [scriptText, setScriptText] = useState("");
+  const [scriptText, setScriptText] = useState(defaultText);
   const [script, setScript] = useState<Script | null>(null);
   const [validationResults, setValidationResults] = useState<
     ValidationResult[] | null
