@@ -463,6 +463,11 @@ export const considerations: ConsiderationsData = {
         reason: "The Organ Grinder can render the Flowergirl useless",
         severity: "high",
       },
+      {
+        characters: ["recluse"],
+        reason: "If the Recluse votes, it can render the Flowergirl useless",
+        severity: "low",
+      },
     ],
     tags: ["each-night", "ongoing-info"],
     setup: {},
@@ -971,6 +976,14 @@ export const considerations: ConsiderationsData = {
   philosopher: {
     jinxes: ["bountyhunter"],
     tags: ["change-character", "causes-droisoning"],
+    clashes: [
+      {
+        characters: ["villageidiot"],
+        reason:
+          "A Philo-Village Idiot can never be drunk, meaning they are VERY powerful.",
+        severity: "medium",
+      },
+    ],
     setup: {},
   },
   pithag: {

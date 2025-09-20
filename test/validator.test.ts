@@ -418,6 +418,66 @@ test("Suggestions pass when multiple tags are given", () => {
   expect(constraintResults2.length).toEqual(0);
 });
 
+test("Validates a script with too much protection imbalance", () => {
+  // Create a script with protection imbalance > 2
+  const scriptWithTooMuchProtection: Script = [
+    { id: "_meta", author: "Test", name: "Too Much Protection Test" },
+    "monk", // prevents-demon-kills
+    "soldier", // prevents-demon-kills
+    "sailor", // prevents-night-death
+    "tealady", // prevents-night-death, prevents-execution, prevents-demon-kills
+    "fool", // prevents-demon-kills, prevents-execution
+    "innkeeper", // prevents-night-death, prevents-demon-kills
+    "assassin", // extra-kill
+    "tinker", // extra-death
+    "moonchild", // extra-death
+    // 6 protection, 3 extra death = imbalance of 3 (too much)
+    "washerwoman", // no protection
+    "imp", // demon
+  ];
+
+  const results = validateScript(scriptWithTooMuchProtection);
+  const protectionResult = results.find((r) => r.id === "too-much-protection");
+
+  expect(protectionResult).toBeDefined();
+  expect(protectionResult?.severity).toBe("medium");
+  expect(protectionResult?.characters).toHaveLength(6);
+  expect(protectionResult?.characters).toEqual([
+    "monk",
+    "soldier",
+    "sailor",
+    "tealady",
+    "fool",
+    "innkeeper",
+  ]);
+  expect(protectionResult?.message).include("protection characters");
+});
+
+test("Validates a script with acceptable protection balance", () => {
+  // Create a script with protection imbalance <= 2 (should pass)
+  const scriptWithAcceptableProtection: Script = [
+    { id: "_meta", author: "Test", name: "Acceptable Protection Test" },
+    "monk", // prevents-demon-kills
+    "soldier", // prevents-demon-kills
+    "sailor", // prevents-night-death
+    "tealady", // prevents-night-death, prevents-execution, prevents-demon-kills
+    "fool", // prevents-demon-kills, prevents-execution
+    "assassin", // extra-kill
+    "tinker", // extra-death
+    "moonchild", // extra-death
+    // 5 protection, 3 extra death = imbalance of 2 (acceptable)
+    "washerwoman", // no protection
+    "butler", // no protection
+    "poisoner", // no protection
+    "imp", // demon
+  ];
+
+  const results = validateScript(scriptWithAcceptableProtection);
+  const protectionResult = results.find((r) => r.id === "too-much-protection");
+
+  expect(protectionResult).toBeUndefined();
+});
+
 test("Official scripts pass validation", () => {
   const TBresults = validateScript(Scripts.troubleBrewing);
   expect.soft(TBresults).toHaveLength(0);

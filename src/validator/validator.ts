@@ -22,6 +22,7 @@ export const FAILURES = {
   suggestions: "Character Suggestion",
   requirements: "Character Requirement Not Met",
   "script-order": "Script Order",
+  "too-much-protection": "Too Much Protection",
 };
 
 export type FailureID = keyof typeof FAILURES;
@@ -48,6 +49,7 @@ const CHECKS: ((
   checkRequirements,
   checkSuggestions,
   checkScriptOrder,
+  tooMuchProtection,
 ];
 
 export function validateScript(script: Script): ValidationResult[] {
@@ -472,6 +474,50 @@ function checkScriptOrder(script: Script): ValidationResult | null {
       message:
         "The script is not in the correct sort order. You can use the sort button on the script tool to correctly sort this script.",
       characters: [],
+    };
+  }
+
+  return null;
+}
+
+function tooMuchProtection(script: Script): ValidationResult | null {
+  const chars = getCharacters(script);
+  const MAX_PROTECTION_IMBALANCE = 2;
+
+  // Find characters that prevent night deaths or demon kills
+  const protectionChars = chars.filter((char) => {
+    const tags = considerations[char]?.tags || [];
+    return (
+      tags.includes("prevents-night-death") ||
+      tags.includes("prevents-demon-kills")
+    );
+  });
+
+  // Find characters that cause extra deaths or kills
+  const extraDeathChars = chars.filter((char) => {
+    const tags = considerations[char]?.tags || [];
+    return tags.includes("extra-death") || tags.includes("extra-kill");
+  });
+
+  const protectionCount = protectionChars.length;
+  const extraDeathCount = extraDeathChars.length;
+  const imbalance = protectionCount - extraDeathCount;
+
+  if (extraDeathCount < 2 && imbalance > MAX_PROTECTION_IMBALANCE) {
+    return {
+      severity: "medium",
+      id: "too-much-protection",
+      message: `This script has ${protectionCount} protection characters, which can lead to slow games that are difficult for Evil. Consider removing some, or adding roles that can create extra deaths in the night.`,
+      characters: protectionChars,
+    };
+  }
+
+  if (imbalance > MAX_PROTECTION_IMBALANCE) {
+    return {
+      severity: "medium",
+      id: "too-much-protection",
+      message: `This script has ${protectionCount} protection characters but only ${extraDeathCount} that can cause extra deaths. This can lead to slow games that are difficult for Evil.`,
+      characters: protectionChars,
     };
   }
 

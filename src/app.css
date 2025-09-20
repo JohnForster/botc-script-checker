@@ -45,3 +45,31 @@ footer {
 .read-the-docs {
   color: #888;
 }
+
+/* Mobile styles */
+@media (max-width: 768px) {
+  #app {
+    padding: 1rem;
+  }
+
+  .container {
+    padding: 0;
+  }
+
+  .main-heading {
+    gap: 1rem;
+  }
+
+  .main-heading img {
+    width: 80px;
+  }
+
+  .main-heading h1 {
+    font-size: 2.1rem;
+  }
+
+  .main-heading div {
+    display: flex;
+    align-items: center;
+  }
+}
