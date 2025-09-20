@@ -355,7 +355,6 @@ function evaluateConstraint(
 ): boolean {
   const chars = getCharacters(script);
   const count = getConstraintCount(chars, constraint.tag);
-  console.log("Tag, count:", constraint.tag, count);
 
   switch (constraint.operator) {
     case "==":
