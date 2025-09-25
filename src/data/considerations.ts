@@ -41,8 +41,18 @@ export const considerations: ConsiderationsData = {
   },
   alhadikhia: {
     jinxes: [],
-    tags: ["resurrection", "extra-kill"],
+    tags: ["public"],
     setup: {},
+    suggestions: [
+      {
+        tag: ["prevents-night-death"],
+        operator: ">",
+        value: 0,
+        severity: "low",
+        message:
+          "Avoid protection roles with the Al-Hadikhia, as they can remove player agency, and cause accidental triple-deaths.",
+      },
+    ],
   },
   alsaahir: {
     jinxes: ["vizier"],
@@ -718,37 +728,25 @@ export const considerations: ConsiderationsData = {
     ],
     clashes: [
       {
+        characters: ["artist"],
+        reason: "The artist can hard-confirm Legion.",
+        severity: "medium",
+      },
+      {
+        characters: ["atheist"],
+        reason: "The Atheist is a very strong bluff in Legion games.",
+        severity: "low",
+      },
+      {
         characters: ["bountyhunter"],
         reason:
           "Adding an extra evil player to a Legion game can make it significantly harder for the good team to win.",
         severity: "medium",
       },
       {
-        characters: ["fearmonger"],
-        reason: "The existence of a Fearmonger proves Legion is not in play",
-        severity: "medium",
-      },
-      {
-        characters: ["vizier"],
-        reason: "The existence of a Vizier proves Legion is not in play",
-        severity: "medium",
-      },
-      {
-        characters: ["organgrinder"],
-        reason:
-          "The Organ Grinder must avoid using their ability to preserve Legion worlds",
+        characters: ["cerenovus"],
+        reason: "The Cerenovus confirms it is not a Legion game.",
         severity: "low",
-      },
-      {
-        characters: ["psychopath"],
-        reason:
-          "The Psychopath must avoid using their ability to preserve Legion worlds",
-        severity: "low",
-      },
-      {
-        characters: ["artist"],
-        reason: "The artist can hard-confirm Legion.",
-        severity: "medium",
       },
       {
         characters: ["chambermaid"],
@@ -766,14 +764,69 @@ export const considerations: ConsiderationsData = {
         severity: "low",
       },
       {
-        characters: ["slayer"],
-        reason: "The Slayer is very powerful in a Legion game.",
-        severity: "low",
+        characters: ["engineer"],
+        reason:
+          "These players cannot be in play at the start of the game, and outed Legion is not fun.",
+        severity: "medium",
+      },
+      {
+        characters: ["fearmonger"],
+        reason: "The existence of a Fearmonger proves Legion is not in play.",
+        severity: "medium",
       },
       {
         characters: ["fortuneteller"],
         reason: "The Fortune Teller is very powerful in a Legion game.",
         severity: "low",
+      },
+      {
+        characters: ["knight"],
+        reason:
+          "In lower player counts, the Knight will know the entire good team.",
+        severity: "high",
+      },
+      {
+        characters: ["noble"],
+        reason:
+          "In lower player counts, the Noble will know the entire good team, as well as one evil player.",
+        severity: "medium",
+      },
+      {
+        characters: ["oracle"],
+        reason: "The Oracle is very powerful in a legion game.",
+        severity: "low",
+      },
+      {
+        characters: ["organgrinder"],
+        reason:
+          "The Organ Grinder must avoid using their ability to preserve Legion worlds.",
+        severity: "low",
+      },
+      {
+        characters: ["psychopath"],
+        reason:
+          "The Psychopath must avoid using their ability to preserve Legion worlds.",
+        severity: "low",
+      },
+      {
+        characters: ["slayer"],
+        reason: "The Slayer is very powerful in a Legion game.",
+        severity: "low",
+      },
+      {
+        characters: ["snakecharmer"],
+        reason: "The Snake Charmer outs legion.",
+        severity: "low",
+      },
+      {
+        characters: ["undertaker"],
+        reason: "The Undertakeris very powerful in a legion game.",
+        severity: "low",
+      },
+      {
+        characters: ["vizier"],
+        reason: "The existence of a Vizier proves Legion is not in play",
+        severity: "medium",
       },
     ],
     tags: ["extra-evil"],
@@ -884,6 +937,16 @@ export const considerations: ConsiderationsData = {
   mastermind: {
     jinxes: ["al-hadikhia", "alchemist", "lleech"],
     tags: ["alt-evil-win-con", "extending"],
+    suggestions: [
+      {
+        tag: ["extra-death", "extra-kill"],
+        operator: ">",
+        value: 2,
+        message:
+          "The Mastermind works best on scripts with other explanations for extra deaths.",
+        severity: "low",
+      },
+    ],
     setup: {},
   },
   mathematician: {
