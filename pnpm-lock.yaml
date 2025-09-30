@@ -9,8 +9,8 @@ importers:
   .:
     dependencies:
       botc-script-checker:
-        specifier: ^0.0.5
-        version: 0.0.5(typescript@5.8.3)
+        specifier: ^0.0.6
+        version: 0.0.6(typescript@5.8.3)
       preact:
         specifier: ^10.27.0
         version: 10.27.2
@@ -481,8 +481,8 @@ packages:
   boolbase@1.0.0:
     resolution: {integrity: sha512-JZOSA7Mo9sNGB8+UjSgzdLtokWAky1zbztM3WRLCbZ70/3cTANmQmOdR7y2g+J0e2WXywy1yS468tY+IruqEww==}
 
-  botc-script-checker@0.0.5:
-    resolution: {integrity: sha512-SbVsNqHVei/I/c13/VAcW4CfGVkAd32juTYDYxw84ZGAcUIzHUDN9zVD88ABF09prWt1OBNdQrTA8DhYbtVaWQ==}
+  botc-script-checker@0.0.6:
+    resolution: {integrity: sha512-JAYQjPDIED6lRKp+5abJAzP6FQO5z+U08cprQRkrh5Nqm9gEqbx8IYJZSDrGeuhsRu7sKrxGMByZgkatICx8sQ==}
     peerDependencies:
       typescript: ^5
 
@@ -1210,7 +1210,7 @@ snapshots:
 
   boolbase@1.0.0: {}
 
-  botc-script-checker@0.0.5(typescript@5.8.3):
+  botc-script-checker@0.0.6(typescript@5.8.3):
     dependencies:
       typescript: 5.8.3
 
