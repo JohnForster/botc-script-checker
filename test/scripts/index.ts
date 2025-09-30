@@ -6,7 +6,7 @@ import singleResurrectionJSON from "./single-resurrection.json";
 import singleExtraDeathJSON from "./single-extra-death.json";
 import blendingInJSON from "./blending-in.json";
 import characterClashJSON from "./character-clash.json";
-import type { Script } from "../../src/types/types";
+import type { Script } from "botc-script-checker";
 
 export const tooMuchDroisoning = droisoningScriptJSON as Script;
 export const badMoonRising = badMoonRisingJSON as Script;

@@ -1,8 +1,12 @@
 import { expect, test } from "vitest";
-import { sortScript, getSortingExplanation } from "../src/validator/script_sorter";
-import type { Script } from "../src/types/types";
-import { ALL_CHARACTERS } from "../src/data/all_characters";
+
 import BlendingInScript from "./scripts/blending-in.json";
+import {
+  type Script,
+  sortScript,
+  getSortingExplanation,
+  ALL_CHARACTERS,
+} from "botc-script-checker";
 
 test("Sorts script by character type order", () => {
   const unsortedScript: Script = [

@@ -1,6 +1,5 @@
+import { type Script, validateScript } from "botc-script-checker";
 import { expect, test } from "vitest";
-import { validateScript } from "../src/validator/validator";
-import type { Script } from "../src/types/types";
 
 test("Balanced script with equal protection and extra death passes", () => {
   const balancedScript: Script = [

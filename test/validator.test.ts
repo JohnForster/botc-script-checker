@@ -1,8 +1,6 @@
-import type { Script } from "../src/types/types";
-
 import { expect, test } from "vitest";
-import { validateScript } from "../src/validator/validator";
 import * as Scripts from "./scripts";
+import { validateScript, type Script } from "botc-script-checker";
 
 test("Validates a script with too much misinformation", () => {
   const results = validateScript(Scripts.tooMuchDroisoning as Script);

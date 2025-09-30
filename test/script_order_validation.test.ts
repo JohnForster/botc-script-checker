@@ -1,7 +1,6 @@
 import { expect, test } from "vitest";
-import { validateScript } from "../src/validator/validator";
-import type { Script } from "../src/types/types";
 import BlendingInScript from "./scripts/blending-in.json";
+import { type Script, validateScript } from "botc-script-checker";
 
 test("Correctly ordered script has no script order validation error", () => {
   // Use the correctly ordered blending-in script
