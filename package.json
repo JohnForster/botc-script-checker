@@ -11,7 +11,6 @@
   },
   "dependencies": {
     "botc-script-checker": "0.0.5",
-    "counterapi": "^2.1.2",
     "preact": "^10.27.0"
   },
   "devDependencies": {

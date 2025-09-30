@@ -1,10 +1,12 @@
 import { useEffect, useState } from "preact/hooks";
-import { type ValidationResult } from "../validator/validator";
-import type { Script } from "../types/types";
-import { getName } from "../types/script";
 
 import "./script-checker.css";
 import { defaultText } from "./defaultText";
+import {
+  getName,
+  type Script,
+  type ValidationResult,
+} from "botc-script-checker";
 
 function ScriptChecker() {
   const [scriptText, setScriptText] = useState(defaultText);
@@ -13,12 +15,12 @@ function ScriptChecker() {
     ValidationResult[] | null
   >(null);
   const [Validator, setValidator] = useState<
-    typeof import("../validator/validator") | null
+    typeof import("botc-script-checker") | null
   >(null);
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
-    import("../validator/validator").then((obj) => setValidator(obj));
+    import("botc-script-checker").then((obj) => setValidator(obj));
   }, []);
 
   const handleFileUpload = (event: Event) => {
@@ -56,7 +58,6 @@ function ScriptChecker() {
       const results = Validator.validateScript(script);
       setScript(script);
       setValidationResults(results);
-
       // Scroll to bottom of page after validation
       setTimeout(() => {
         window.scrollTo({
@@ -146,7 +147,9 @@ function ScriptChecker() {
                 <span class="severity-badge">
                   {result.severity.toUpperCase()}
                 </span>
-                <div class="result-id">{Validator.FAILURES[result.id]}: </div>
+                <div class="result-id">
+                  {Validator.FAILURE_NAMES[result.id]}:{" "}
+                </div>
                 <div class="result-characters">
                   {result.characters.map(getCharacterName).join(", ")}
                 </div>
