@@ -3,10 +3,37 @@ import { useEffect, useState } from "preact/hooks";
 import "./script-checker.css";
 import { defaultText } from "./defaultText";
 import {
+  getCharacters,
   getName,
+  type BloodOnTheClocktowerCustomScript,
   type Script,
+  type ScriptElement,
+  type ScriptMetadata,
   type ValidationResult,
 } from "botc-script-checker";
+
+const logUsage = async (script: BloodOnTheClocktowerCustomScript) => {
+  let FIREBASE_URL = "https://logusage-dvbaqkhwga-uc.a.run.app ";
+  const isMetaData = (el: ScriptElement): el is ScriptMetadata =>
+    typeof el === "object" && el.id === "_meta";
+  const meta = script.find(isMetaData);
+  const characters = getCharacters(script);
+
+  fetch(FIREBASE_URL, {
+    method: "POST",
+    body: JSON.stringify({
+      title: getName(script),
+      author: meta?.author ?? "John",
+      characters,
+    }),
+    headers: {
+      "x-password": "dungeon-mister",
+    },
+  })
+    .then((res) => res.json())
+    .then(console.log)
+    .catch(console.error);
+};
 
 function ScriptChecker() {
   const [scriptText, setScriptText] = useState(defaultText);
@@ -56,6 +83,7 @@ function ScriptChecker() {
       const script: Script = JSON.parse(scriptText);
 
       const results = Validator.validateScript(script);
+      logUsage(script);
       setScript(script);
       setValidationResults(results);
       // Scroll to bottom of page after validation
