@@ -13,7 +13,7 @@ import {
 } from "botc-script-checker";
 
 const logUsage = async (script: BloodOnTheClocktowerCustomScript) => {
-  let FIREBASE_URL = "https://logusage-dvbaqkhwga-uc.a.run.app ";
+  const FIREBASE_URL = "https://logusage-dvbaqkhwga-uc.a.run.app";
   const isMetaData = (el: ScriptElement): el is ScriptMetadata =>
     typeof el === "object" && el.id === "_meta";
   const meta = script.find(isMetaData);
@@ -22,17 +22,17 @@ const logUsage = async (script: BloodOnTheClocktowerCustomScript) => {
   fetch(FIREBASE_URL, {
     method: "POST",
     body: JSON.stringify({
+      app: "script-checker",
       title: getName(script),
-      author: meta?.author ?? "John",
+      author: meta?.author ?? "Unknown",
+      characterCount: characters.length,
       characters,
     }),
     headers: {
       "x-password": "dungeon-mister",
+      "Content-Type": "application/json",
     },
-  })
-    .then((res) => res.json())
-    .then(console.log)
-    .catch(console.error);
+  }).catch(console.error);
 };
 
 function ScriptChecker() {
