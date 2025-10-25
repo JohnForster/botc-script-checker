@@ -9,7 +9,7 @@ export const App = () => {
       <div class="container">
         <div class="main-heading">
           <div>
-            <img src={import.meta.env.BASE_URL + "/favicon.png"}></img>
+            <img src="/favicon.png"></img>
           </div>
           <h1>Blood on the Clocktower Custom Script Checker</h1>
         </div>
