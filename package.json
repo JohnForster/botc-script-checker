@@ -10,7 +10,7 @@
     "test": "vitest"
   },
   "dependencies": {
-    "botc-script-checker": "^0.0.7",
+    "botc-script-checker": "^0.0.9",
     "preact": "^10.27.0"
   },
   "devDependencies": {
