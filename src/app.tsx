@@ -5,38 +5,36 @@ import ScriptChecker from "./components/ScriptChecker";
 
 export const App = () => {
   return (
-    <>
-      <div class="container">
-        <div class="main-heading">
-          <div>
-            <img src="/favicon.png"></img>
-          </div>
-          <h1>Blood on the Clocktower Custom Script Checker</h1>
+    <div class="container">
+      <div class="main-heading">
+        <div>
+          <img src="/favicon.png"></img>
         </div>
-
-        <p>
-          An unofficial tool to help custom script writers spot potential issues
-          early. This is still <strong>very early in development</strong>, and
-          it is impossible to catch every issue with a script. There may be
-          false positives, and it won't catch every mistake.
-        </p>
-
-        <p>
-          <strong>
-            If you have any feedback, please let me know{" "}
-            <a href="https://forms.gle/D4sPXcXHy4v2o5CP8">
-              <strong>here</strong>
-            </a>
-            .
-          </strong>
-        </p>
-        <ScriptChecker />
-        <footer>
-          This project is not affiliated with The Pandemonium Institute. All
-          roles, rules, images and content are the property of Steven Medway and
-          The Pandemonium Institute.
-        </footer>
+        <h1>Blood on the Clocktower Custom Script Checker</h1>
       </div>
-    </>
+
+      <p>
+        An unofficial tool to help custom script writers spot potential issues
+        early. This is still <strong>very early in development</strong>, and
+        it is impossible to catch every issue with a script. There may be
+        false positives, and it won't catch every mistake.
+      </p>
+
+      <p>
+        <strong>
+          If you have any feedback, please let me know{" "}
+          <a href="https://forms.gle/D4sPXcXHy4v2o5CP8">
+            <strong>here</strong>
+          </a>
+          .
+        </strong>
+      </p>
+      <ScriptChecker />
+      <footer>
+        This project is not affiliated with The Pandemonium Institute. All
+        roles, rules, images and content are the property of Steven Medway and
+        The Pandemonium Institute.
+      </footer>
+    </div>
   );
 };
