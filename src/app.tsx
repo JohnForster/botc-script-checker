@@ -15,18 +15,18 @@ export const App = () => {
 
       <p>
         An unofficial tool to help custom script writers spot potential issues
-        early. This is still <strong>very early in development</strong>, and
-        it is impossible to catch every issue with a script. There may be
-        false positives, and it won't catch every mistake.
+        early. This is still <strong>very early in development</strong>, and it
+        is impossible to catch every issue with a script. There may be false
+        positives, and it won't catch every mistake.
       </p>
 
       <p>
         <strong>
-          If you have any feedback, please let me know{" "}
-          <a href="https://forms.gle/D4sPXcXHy4v2o5CP8">
+          ⭐️ If you have any feedback, please let me know{" "}
+          <a href="https://forms.gle/z1yeAW7x91X4Uc4H8">
             <strong>here</strong>
-          </a>
-          .
+          </a>{" "}
+          ⭐️
         </strong>
       </p>
       <ScriptChecker />

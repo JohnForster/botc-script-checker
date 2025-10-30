@@ -5,7 +5,7 @@ scripts.
 
 ## ⚠️ Beta Status
 
-Please provide feedback here: https://forms.gle/D4sPXcXHy4v2o5CP8
+Please provide feedback here: https://forms.gle/z1yeAW7x91X4Uc4H8
 
 **This project is currently in beta.** The validation rules are based on general
 script-writing guidelines and common patterns, but they are not definitive. Many
