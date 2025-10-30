@@ -191,7 +191,13 @@ function ScriptChecker() {
       {validationResults &&
         validationResults.length === 0 &&
         scriptText &&
-        !error && <div class="success">No issues found!</div>}
+        !error && (
+          <div class="success">
+            No issues found! Next, why don't you try the{" "}
+            <a href="https://fancy.ravenswoodstudio.xyz">Fancy PDF Generator</a>{" "}
+            and make your script beautiful?
+          </div>
+        )}
     </>
   );
 }
