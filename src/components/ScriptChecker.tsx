@@ -2,7 +2,6 @@ import { useEffect, useRef, useState } from "preact/hooks";
 import { TrashIcon } from "@heroicons/react/24/outline";
 
 import "./script-checker.css";
-import { defaultText } from "./defaultText";
 import {
   getCharacters,
   getName,
@@ -37,7 +36,7 @@ const logUsage = async (script: BloodOnTheClocktowerCustomScript) => {
 };
 
 function ScriptChecker() {
-  const [scriptText, setScriptText] = useState(defaultText);
+  const [scriptText, setScriptText] = useState("");
   const [script, setScript] = useState<Script | null>(null);
   const [validationResults, setValidationResults] = useState<
     ValidationResult[] | null
@@ -46,10 +45,36 @@ function ScriptChecker() {
     typeof import("botc-script-checker") | null
   >(null);
   const [error, setError] = useState<string | null>(null);
+  const [showTextarea, setShowTextarea] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
+  const textareaRef = useRef<HTMLTextAreaElement>(null);
 
   useEffect(() => {
     import("botc-script-checker").then((obj) => setValidator(obj));
+  }, []);
+
+  useEffect(() => {
+    const handlePaste = (e: ClipboardEvent) => {
+      // Only intercept paste if it's not targeted at the textarea
+      const isTextareaPaste = e.target === textareaRef.current;
+
+      if (!isTextareaPaste && e.clipboardData) {
+        const pastedText = e.clipboardData.getData("text");
+        if (pastedText) {
+          setScriptText(pastedText);
+          setShowTextarea(true);
+          setValidationResults(null);
+          setError(null);
+          e.preventDefault();
+        }
+      }
+    };
+
+    document.addEventListener("paste", handlePaste);
+
+    return () => {
+      document.removeEventListener("paste", handlePaste);
+    };
   }, []);
 
   const handleFileUpload = (event: Event) => {
@@ -60,6 +85,7 @@ function ScriptChecker() {
       reader.onload = (e) => {
         const content = e.target?.result as string;
         setScriptText(content);
+        setShowTextarea(true);
       };
       reader.readAsText(file);
       setValidationResults(null);
@@ -112,10 +138,15 @@ function ScriptChecker() {
     setValidationResults(null);
     setError(null);
     setScript(null);
+    setShowTextarea(false);
     if (fileInputRef.current) {
       fileInputRef.current.value = "";
     }
   };
+
+  const isMac =
+    typeof navigator !== "undefined" &&
+    /Mac|iPhone|iPod|iPad/.test(navigator.platform);
 
   const getSeverityClass = (severity: string) => {
     switch (severity) {
@@ -148,32 +179,45 @@ function ScriptChecker() {
           class="file-input"
           ref={fileInputRef}
         />
-        <textarea
-          value={scriptText}
-          onInput={(e) =>
-            setScriptText((e.target as HTMLTextAreaElement).value)
-          }
-          placeholder="Paste your JSON script here..."
-          class="script-textarea"
-          rows={10}
-        />
-        <div class="button-container">
-          <button
-            onClick={handleValidate}
-            disabled={!Validator}
-            class="validate-button"
-          >
-            {Validator ? "Check Script" : "Loading..."}
-          </button>
-          <button
-            onClick={handleClear}
-            class="clear-button"
-            aria-label="Clear input"
-            title="Clear input"
-          >
-            <TrashIcon class="icon" />
-          </button>
-        </div>
+        {!showTextarea && (
+          <div class="paste-prompt">
+            <p class="paste-instruction">
+              Or paste JSON directly with <kbd>{isMac ? "⌘" : "Ctrl"}</kbd>+
+              <kbd>V</kbd>
+            </p>
+          </div>
+        )}
+        {showTextarea && (
+          <>
+            <textarea
+              ref={textareaRef}
+              value={scriptText}
+              onInput={(e) =>
+                setScriptText((e.target as HTMLTextAreaElement).value)
+              }
+              placeholder="Paste your JSON script here..."
+              class="script-textarea"
+              rows={10}
+            />
+            <div class="button-container">
+              <button
+                onClick={handleValidate}
+                disabled={!Validator}
+                class="validate-button"
+              >
+                {Validator ? "Check Script" : "Loading..."}
+              </button>
+              <button
+                onClick={handleClear}
+                class="clear-button"
+                aria-label="Clear input"
+                title="Clear input"
+              >
+                <TrashIcon class="icon" />
+              </button>
+            </div>
+          </>
+        )}
       </div>
 
       {error && (
