@@ -1,4 +1,5 @@
-import { useEffect, useState } from "preact/hooks";
+import { useEffect, useRef, useState } from "preact/hooks";
+import { TrashIcon } from "@heroicons/react/24/outline";
 
 import "./script-checker.css";
 import { defaultText } from "./defaultText";
@@ -45,6 +46,7 @@ function ScriptChecker() {
     typeof import("botc-script-checker") | null
   >(null);
   const [error, setError] = useState<string | null>(null);
+  const fileInputRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
     import("botc-script-checker").then((obj) => setValidator(obj));
@@ -105,6 +107,16 @@ function ScriptChecker() {
     }
   };
 
+  const handleClear = () => {
+    setScriptText("");
+    setValidationResults(null);
+    setError(null);
+    setScript(null);
+    if (fileInputRef.current) {
+      fileInputRef.current.value = "";
+    }
+  };
+
   const getSeverityClass = (severity: string) => {
     switch (severity) {
       case "high":
@@ -134,6 +146,7 @@ function ScriptChecker() {
           accept=".json"
           onChange={handleFileUpload}
           class="file-input"
+          ref={fileInputRef}
         />
         <textarea
           value={scriptText}
@@ -144,13 +157,23 @@ function ScriptChecker() {
           class="script-textarea"
           rows={10}
         />
-        <button
-          onClick={handleValidate}
-          disabled={!Validator}
-          class="validate-button"
-        >
-          {Validator ? "Check Script" : "Loading..."}
-        </button>
+        <div class="button-container">
+          <button
+            onClick={handleValidate}
+            disabled={!Validator}
+            class="validate-button"
+          >
+            {Validator ? "Check Script" : "Loading..."}
+          </button>
+          <button
+            onClick={handleClear}
+            class="clear-button"
+            aria-label="Clear input"
+            title="Clear input"
+          >
+            <TrashIcon class="icon" />
+          </button>
+        </div>
       </div>
 
       {error && (
