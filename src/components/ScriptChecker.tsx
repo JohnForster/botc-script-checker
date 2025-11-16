@@ -228,7 +228,7 @@ function ScriptChecker() {
 
       {Validator && validationResults && validationResults.length > 0 && (
         <div class="results-section">
-          <h2>{script && getName(script)} - Results</h2>
+          <h2>{script ? getName(script) : "Untitled Script"} - Results</h2>
           <div class="results-summary">
             Found {validationResults.length} issue
             {validationResults.length !== 1 ? "s" : ""}
