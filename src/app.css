@@ -30,6 +30,10 @@ body {
   align-items: center;
 }
 
+.main-heading img {
+  width: 8rem;
+}
+
 footer {
   font-size: small;
   color: slategray;
