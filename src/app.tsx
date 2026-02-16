@@ -8,7 +8,7 @@ export const App = () => {
     <div class="container">
       <div class="main-heading">
         <div>
-          <img src="/favicon.png"></img>
+          <img src="/favicon.svg"></img>
         </div>
         <h1>Blood on the Clocktower Custom Script Checker</h1>
       </div>
